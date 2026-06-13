@@ -17,7 +17,6 @@
             background: #ffffff; border-right: 1px solid #e2e8f0;
             transition: all 0.3s ease; z-index: 100;
         }
-        /* PERBAIKAN: Menghapus display:none agar mini-sidebar berfungsi */
         .sidebar.collapsed { width: 72px; }
         .sidebar-text { font-weight: bold; transition: opacity 0.2s; white-space: nowrap; }
         .sidebar.collapsed .sidebar-text { opacity: 0; display: none; }
@@ -122,7 +121,7 @@
         @media (max-width: 768px) {
             .sidebar { left: -260px; width: 260px; }
             .sidebar.mobile-open { left: 0; display: block; box-shadow: 10px 0 20px rgba(0,0,0,0.1); }
-            .sidebar.collapsed { width: 260px; } /* Disable collapse on mobile */
+            .sidebar.collapsed { width: 260px; }
             .main-content { margin-left: 0; }
             .main-content.expanded { margin-left: 0; }
             .stats-grid { grid-template-columns: 1fr; }
@@ -144,11 +143,12 @@
         <div class="nav-item {{ Str::contains($menu, 'dashboard') ? 'active' : '' }}">
             <a href="?menu=dashboard"><i class="fas fa-chart-pie"></i><span class="sidebar-text">Dashboard</span></a>
         </div>
-        <div class="nav-item {{ Str::contains($menu, 'petugas') ? 'active' : '' }}">
-            <a href="?menu=petugas"><i class="fas fa-user-tie"></i><span class="sidebar-text">Petugas</span></a>
-        </div>
-        <div class="nav-item {{ Str::contains($menu, 'pelanggan') ? 'active' : '' }}">
-            <a href="?menu=pelanggan-lihat"><i class="fas fa-user-friends"></i><span class="sidebar-text">Pelanggan</span></a>
+       <div class="nav-item {{ request()->routeIs('petugas.*') ? 'active' : '' }}">
+    <a href="{{ route('petugas.index') }}"><i class="fas fa-user-tie"></i><span class="sidebar-text">Petugas</span></a>
+</div>
+        <!-- Perbaikan: menu Pelanggan diubah ke route Laravel, bukan parameter query -->
+        <div class="nav-item {{ request()->routeIs('pelanggans.*') ? 'active' : '' }}">
+            <a href="{{ route('pelanggans.index') }}"><i class="fas fa-user-friends"></i><span class="sidebar-text">Pelanggan</span></a>
         </div>
         <div class="nav-item {{ Str::contains($menu, 'supplier') ? 'active' : '' }}">
             <a href="?menu=supplier-lihat"><i class="fas fa-truck"></i><span class="sidebar-text">Supplier</span></a>
@@ -320,7 +320,6 @@
                 </div>
 
                 <script>
-                // Konfigurasi Chart.js
                 new Chart(document.getElementById('salesChart'), {
                     type: 'line',
                     data: {
@@ -380,8 +379,10 @@
                 </script>
             @break
 
-            {{-- PENGGANTI INCLUDE FILE-FILE LAIN (Pastikan nanti file Blade ini dibuat ya!) --}}
-            @case('petugas') @include('petugas.petugas-lihat') @break
+            {{-- Include file-file lainnya (sementara tetap, karena mungkin belum diubah ke Laravel) --}}
+            @case('petugas')
+    <script>window.location.href = "{{ route('petugas.index') }}";</script>
+@break
             @case('petugas-tambah') @include('petugas.petugas-tambah') @break
             @case('petugas-ubah') @include('petugas.petugas-ubah') @break
             @case('petugas-hapus') @include('petugas.petugas-hapus') @break
@@ -465,7 +466,6 @@
         }
     });
 
-    // Menutup sidebar mobile saat area luar diklik
     document.addEventListener('click', (e) => {
         if (window.innerWidth <= 768) {
             if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {

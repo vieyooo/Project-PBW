@@ -974,16 +974,16 @@
         },
         {
             "name": "guzzlehttp/uri-template",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/uri-template.git",
-                "reference": "eef7f87bab6f204eba3c39224d8075c70c637946"
+                "reference": "7fe811c23a9e3cd712b4389eaeb50b5456d8c529"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/uri-template/zipball/eef7f87bab6f204eba3c39224d8075c70c637946",
-                "reference": "eef7f87bab6f204eba3c39224d8075c70c637946",
+                "url": "https://api.github.com/repos/guzzle/uri-template/zipball/7fe811c23a9e3cd712b4389eaeb50b5456d8c529",
+                "reference": "7fe811c23a9e3cd712b4389eaeb50b5456d8c529",
                 "shasum": ""
             },
             "require": {
@@ -1040,7 +1040,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/uri-template/issues",
-                "source": "https://github.com/guzzle/uri-template/tree/v1.0.6"
+                "source": "https://github.com/guzzle/uri-template/tree/v1.0.7"
             },
             "funding": [
                 {
@@ -1056,20 +1056,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-23T22:00:21+00:00"
+            "time": "2026-06-12T21:33:43+00:00"
         },
         {
             "name": "laravel/framework",
-            "version": "v12.61.1",
+            "version": "v12.62.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "e8472ca9774452fe50841d9bdced060679f4d58d"
+                "reference": "f7e61eb1e0e06a38996802b769bce9127aec227c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/e8472ca9774452fe50841d9bdced060679f4d58d",
-                "reference": "e8472ca9774452fe50841d9bdced060679f4d58d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f7e61eb1e0e06a38996802b769bce9127aec227c",
+                "reference": "f7e61eb1e0e06a38996802b769bce9127aec227c",
                 "shasum": ""
             },
             "require": {
@@ -1278,7 +1278,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-06-04T14:22:52+00:00"
+            "time": "2026-06-09T13:50:13+00:00"
         },
         {
             "name": "laravel/prompts",
