@@ -3,59 +3,48 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Petugas;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    // Menampilkan halaman login
+    // 1. Menampilkan halaman login
     public function showLoginForm()
     {
-        // Jika sudah login, langsung lempar ke dashboard
-        if (session()->has('login') && session('login') === true) {
+        if (Auth::check()) {
             return redirect()->route('dashboard');
         }
-
-        return view('login');
+        
+        // Sesuaikan dengan letak file kamu: 'login' jika di luar, 'auth.login' jika di dalam folder auth
+        return view('auth.login'); 
     }
 
-    // Memproses data login
-    public function login(Request $request)
-    {
-        // Ambil input dari form
-        $username = $request->input('username');
-        $password = $request->input('password');
+    // 2. Memproses data login asli
+public function login(Request $request)
+{
+    $username = trim($request->input('username'));
+    $password = trim($request->input('password'));
 
-        // Cari data di tabel petugas
-        $petugas = Petugas::where('NAMA_PETUGAS', $username)->first();
+    $credentials = [
+        'NAMA_PETUGAS' => $username,
+        'password'     => $password,
+    ];
 
-        if ($petugas) {
-            // Pengecekan password (masih mengikuti logikamu: password default '123')
-            // Catatan: Nanti untuk sistem produksi nyata, gunakan Hash::check() ya!
-            if ($password === '123') {
-                
-                // Set session menggunakan helper Laravel
-                session([
-                    'login' => true,
-                    'id_petugas' => $petugas->ID_PETUGAS,
-                    'nama_petugas' => $petugas->NAMA_PETUGAS,
-                    'jabatan' => $petugas->JABATAN
-                ]);
-
-                return redirect()->route('dashboard');
-            } else {
-                // Kembali ke halaman login dengan pesan error
-                return back()->with('error', 'Password salah!')->withInput();
-            }
-        } else {
-            return back()->with('error', 'Nama Petugas tidak ditemukan!')->withInput();
-        }
+    if (\Illuminate\Support\Facades\Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+        return redirect()->intended('dashboard');
     }
 
-    // Fungsi untuk logout sekalian
-    public function logout()
+    return back()->with('error', 'Nama Petugas atau Kata Sandi salah!')->withInput();
+}
+
+    // 3. Memproses logout
+    public function logout(Request $request)
     {
-        session()->flush(); // Hapus semua session
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
 }

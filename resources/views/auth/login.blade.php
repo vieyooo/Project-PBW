@@ -170,7 +170,7 @@
                         <div class="mt-4 text-center">
                             <small class="text-muted">Demo: Nama = Edy | Password = 123</small>
                             <br>
-                            <small class="text-muted">Atau: Prasetyo Andi, Bambang Supriyadi, Rizky Fadillah, Siti Nurjanah</small>
+                            <small class="text-muted">Atau: , Bambang Supriyadi, Rizky Fadillah, Siti Nurjanah</small>
                         </div>
                     </div>
 

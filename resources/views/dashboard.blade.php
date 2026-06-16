@@ -140,31 +140,40 @@
     <div class="logo"><h2>vertue<span>.</span></h2></div>
     <div class="logo-mini">V<span>.</span></div>
     <div class="nav">
-        <div class="nav-item {{ Str::contains($menu, 'dashboard') ? 'active' : '' }}">
-            <a href="?menu=dashboard"><i class="fas fa-chart-pie"></i><span class="sidebar-text">Dashboard</span></a>
+<div class="nav">
+    <div class="nav-item {{ Str::contains($menu, 'dashboard') ? 'active' : '' }}">
+        <a href="?menu=dashboard"><i class="fas fa-chart-pie"></i><span class="sidebar-text">Dashboard</span></a>
+    </div>
+
+    @if(Str::contains(strtolower(Auth::user()->JABATAN), ['customer', 'owner']))
+        <div class="nav-item {{ request()->routeIs('petugas.*') || Str::contains($menu, 'petugas') ? 'active' : '' }}">
+            <a href="{{ route('petugas.index') }}"><i class="fas fa-user-tie"></i><span class="sidebar-text">Petugas</span></a>
         </div>
-       <div class="nav-item {{ request()->routeIs('petugas.*') ? 'active' : '' }}">
-    <a href="{{ route('petugas.index') }}"><i class="fas fa-user-tie"></i><span class="sidebar-text">Petugas</span></a>
-</div>
-        <!-- Perbaikan: menu Pelanggan diubah ke route Laravel, bukan parameter query -->
-        <div class="nav-item {{ request()->routeIs('pelanggans.*') ? 'active' : '' }}">
+        <div class="nav-item {{ request()->routeIs('pelanggans.*') || Str::contains($menu, 'pelanggan') ? 'active' : '' }}">
             <a href="{{ route('pelanggans.index') }}"><i class="fas fa-user-friends"></i><span class="sidebar-text">Pelanggan</span></a>
         </div>
         <div class="nav-item {{ Str::contains($menu, 'supplier') ? 'active' : '' }}">
             <a href="?menu=supplier-lihat"><i class="fas fa-truck"></i><span class="sidebar-text">Supplier</span></a>
         </div>
+        <div class="nav-item {{ Str::contains($menu, 'penjualan') ? 'active' : '' }}">
+            <a href="?menu=penjualan"><i class="fas fa-file-invoice-dollar"></i><span class="sidebar-text">Penjualan</span></a>
+        </div>
+    @endif
+
+    @if(Str::contains(strtolower(Auth::user()->JABATAN), ['production', 'owner']))
         <div class="nav-item {{ Str::contains($menu, 'bahanbaku') ? 'active' : '' }}">
             <a href="?menu=bahanbaku-lihat"><i class="fas fa-boxes"></i><span class="sidebar-text">Bahan Baku</span></a>
         </div>
         <div class="nav-item {{ Str::contains($menu, 'barang') ? 'active' : '' }}">
-            <a href="?menu=barang-lihat"><i class="fas fa-box"></i><span class="sidebar-text"> Barang</span></a>
+            <a href="?menu=barang-lihat"><i class="fas fa-box"></i><span class="sidebar-text"> Barang / BOM</span></a>
         </div>
-        <div class="nav-item {{ Str::contains($menu, 'pembelian') ? 'active' : '' }}">
-            <a href="?menu=pembelian"><i class="fas fa-shopping-cart"></i><span class="sidebar-text">Pembelian</span></a>
-        </div>
-        <div class="nav-item {{ Str::contains($menu, 'penjualan') ? 'active' : '' }}">
-            <a href="?menu=penjualan"><i class="fas fa-file-invoice-dollar"></i><span class="sidebar-text">Penjualan</span></a>
-        </div>
+    @endif
+
+    <div class="nav-item {{ Str::contains($menu, 'pembelian') ? 'active' : '' }}">
+        <a href="?menu=pembelian"><i class="fas fa-shopping-cart"></i><span class="sidebar-text">Pembelian</span></a>
+    </div>
+</div>
+    </div>
         <div style="margin-top:40px; border-top:1px solid #e2e8f0; padding-top:12px;"></div>
         <div class="nav-item">
             <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin keluar dari Dashboard?')) { document.getElementById('logout-form').submit(); }">
@@ -293,7 +302,7 @@
                                     <div class="customer-name">{{ $row->NAMA_PELANGGAN }}</div>
                                     <div class="customer-address">{{ Str::limit($row->ALAMAT ?? '', 40) }}</div>
                                 </div>
-                                <div class="customer-status"><i class="fas fa-check"></i> Aktif</div>
+                                <div class="customer-status"><i class="fas fa-check"></i> Hack</div>
                             </div>
                             @endforeach
                         @else
@@ -379,10 +388,9 @@
                 </script>
             @break
 
-            {{-- Include file-file lainnya (sementara tetap, karena mungkin belum diubah ke Laravel) --}}
             @case('petugas')
-    <script>window.location.href = "{{ route('petugas.index') }}";</script>
-@break
+                <script>window.location.href = "{{ route('petugas.index') }}";</script>
+            @break
             @case('petugas-tambah') @include('petugas.petugas-tambah') @break
             @case('petugas-ubah') @include('petugas.petugas-ubah') @break
             @case('petugas-hapus') @include('petugas.petugas-hapus') @break
