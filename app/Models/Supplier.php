@@ -20,4 +20,8 @@ class Supplier extends Model
         'FAX',
         'PIC_SUPPLIER',
     ];
+      public function pembelian()
+    {
+        return $this->hasMany(Pembelian::class, 'ID_SUPPLIER', 'ID_SUPPLIER');
+    }
 }

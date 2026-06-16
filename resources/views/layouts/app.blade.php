@@ -115,9 +115,12 @@
             <a href="{{ route('barang.index') }}"><i class="fas fa-box"></i><span class="sidebar-text">Barang</span></a>
         </div>
         <!-- Pembelian (sementara belum ada route, bisa diarahkan ke # dulu) -->
-        <div class="nav-item">
-            <a href="#"><i class="fas fa-shopping-cart"></i><span class="sidebar-text">Pembelian</span></a>
-        </div>
+        <div class="nav-item {{ request()->routeIs('pembelian.*') ? 'active' : '' }}">
+    <a href="{{ route('pembelian.index') }}">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="sidebar-text">Pembelian</span>
+    </a>
+</div>
         <!-- Penjualan (sementara) -->
         <div class="nav-item">
             <a href="#"><i class="fas fa-file-invoice-dollar"></i><span class="sidebar-text">Penjualan</span></a>
