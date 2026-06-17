@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"> 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -121,7 +120,7 @@
                     
                     <div class="col-md-6 pe-md-5 mb-5 mb-md-0 border-md-end" style="border-color: rgba(11,33,84,0.1) !important;">
                         <div class="logo-wrapper mb-4" style="background: white; padding: 10px 25px; border-radius: 30px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                            <img src="{{ asset('img/logo-vertue.png') }}" alt="Vertue Concept" style="height: 40px;" onerror="this.src='https://via.placeholder.com/150x50/ffffff/D4AF37?text=VERTUE'">
+                            <img src="{{ asset('img/logo-vertue.png') }}" alt="Vertue Concept" style="height: 40px;" onerror="this.style.display='none';">
                         </div>
                         <h2 class="fw-bold mb-3" style="line-height: 1.2;">Sistem Manajemen <br><span style="color: #D4AF37;">Produksi & Penjualan</span></h2>
                         <p style="color: #0B2154; font-size: 0.95rem; line-height: 1.6;">
@@ -170,7 +169,7 @@
                         <div class="mt-4 text-center">
                             <small class="text-muted">Demo: Nama = Edy | Password = 123</small>
                             <br>
-                            <small class="text-muted">Atau: , Bambang Supriyadi, Rizky Fadillah, Siti Nurjanah</small>
+                            <small class="text-muted">Atau: Bambang Supriyadi, Rizky Fadillah, Siti Nurjanah</small>
                         </div>
                     </div>
 
