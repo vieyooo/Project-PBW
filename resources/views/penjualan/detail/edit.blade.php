@@ -1,7 +1,7 @@
 @extends('layouts.app')
+@section('page-title', 'Edit Detail Penjualan')
 
 @section('content')
-
 <style>
     .form-container {
         max-width: 600px; margin: 0 auto; background: #fff; border-radius: 20px;
@@ -11,8 +11,7 @@
         border-bottom: 2px dashed #f1f5f9; margin-bottom: 20px; padding-bottom: 12px;
     }
     .form-header h3 {
-        font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px;
-        margin: 0;
+        font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin: 0;
     }
     .form-header h3 i {
         color: #b8860b; background: rgba(184,134,11,0.1); padding: 8px; border-radius: 10px;
@@ -54,9 +53,6 @@
     .form-actions {
         display: flex; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #f1f5f9;
     }
-    .form-hint {
-        font-size: 11px; color: #94a3b8; margin-top: 4px;
-    }
     @media (max-width: 640px) {
         .form-actions { flex-direction: column; }
         .btn { justify-content: center; }
@@ -65,62 +61,36 @@
 
 <div class="form-container">
     <div class="form-header">
-        <h3><i class="fas fa-cart-plus"></i> Tambah Bahan Baku ke Pembelian</h3>
+        <h3><i class="fas fa-edit"></i> Edit Detail Penjualan</h3>
     </div>
-
     @if($errors->any())
-        <div class="alert-error">
-            <i class="fas fa-exclamation-triangle"></i> {{ $errors->first() }}
-        </div>
+        <div class="alert-error"><i class="fas fa-exclamation-triangle"></i> {{ $errors->first() }}</div>
     @endif
-
-    <form method="POST" action="{{ route('pembelian.detail.store', $noInvoice) }}">
-        @csrf
-
+    <form method="POST" action="{{ route('detailpenjualan.update', ['id_penjualan' => $penjualan->ID_PENJUALAN, 'id_barang' => $detail->ID_BARANG]) }}">
+        @csrf @method('PUT')
         <div class="form-group">
-            <label class="form-label">No. Invoice</label>
-            <input type="text" class="form-control" value="{{ $noInvoice }}" readonly>
+            <label class="form-label">ID Penjualan</label>
+            <input type="text" class="form-control" value="{{ $penjualan->ID_PENJUALAN }}" readonly>
         </div>
-
         <div class="form-group">
-            <label class="form-label">Pilih Bahan Baku <span style="color:red;">*</span></label>
-            <select name="id_bahan" class="form-control" required>
-                <option value="">-- Pilih Bahan Baku --</option>
-                @foreach($bahanBakus as $b)
-                    <option value="{{ $b->id_bahan_baku }}"
-                        {{ old('id_bahan') == $b->id_bahan_baku ? 'selected' : '' }}>
-                        {{ $b->id_bahan_baku }} - {{ $b->jenis }} ({{ $b->kode }}) - Stok: {{ $b->stok }} {{ $b->satuan }}
-                    </option>
-                @endforeach
-            </select>
-            @if($bahanBakus->isEmpty())
-                <p class="form-hint" style="color:#dc2626;">Semua bahan baku sudah ditambahkan ke invoice ini.</p>
-            @endif
+            <label class="form-label">Barang</label>
+            <input type="text" class="form-control" value="{{ $detail->ID_BARANG . ' - ' . ($detail->barang->NAMA_BARANG ?? '') }}" readonly>
         </div>
-
         <div class="form-group">
             <label class="form-label">Qty <span style="color:red;">*</span></label>
-            <input type="number" name="qty" class="form-control" required min="1"
-                   value="{{ old('qty', 1) }}">
-            <p class="form-hint">Jumlah bahan baku yang dibeli.</p>
+            <input type="number" name="QTY" class="form-control" required min="1" value="{{ old('QTY', $detail->QTY) }}">
         </div>
-
         <div class="form-group">
-            <label class="form-label">Harga Jual (Rp) <span style="color:red;">*</span></label>
-            <input type="number" name="harga_jual" class="form-control" required min="0" step="1000"
-                   placeholder="Contoh: 500000" value="{{ old('harga_jual') }}">
-            <p class="form-hint">Harga per unit dari supplier.</p>
+            <label class="form-label">Harga Satuan (Rp) <span style="color:red;">*</span></label>
+            @php
+                $harga_satuan_lama = ($detail->QTY > 0) ? ($detail->JUMLAH / $detail->QTY) : 0;
+            @endphp
+            <input type="number" name="HARGA_SATUAN" class="form-control" required min="0" step="1000" value="{{ old('HARGA_SATUAN', $harga_satuan_lama) }}">
         </div>
-
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> Simpan
-            </button>
-            <a href="{{ route('pembelian.show', $noInvoice) }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Batal
-            </a>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+            <a href="{{ route('detailpenjualan.index', ['id' => $penjualan->ID_PENJUALAN]) }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Batal</a>
         </div>
     </form>
 </div>
-
 @endsection

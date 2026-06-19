@@ -36,22 +36,60 @@
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
-        .header-left h1 { color: #b8860b; margin: 0 0 5px 0; font-size: 28px; }
-        .header-left p { margin: 0; color: #64748b; font-size: 12px; }
+        .header-left h1 {
+            color: #b8860b;
+            margin: 0 0 5px 0;
+            font-size: 28px;
+        }
+        .header-left p {
+            margin: 0;
+            color: #64748b;
+            font-size: 12px;
+        }
         .header-right { text-align: right; }
-        .header-right h2 { margin: 0; font-size: 28px; color: #b8860b; }
+        .header-right h2 {
+            margin: 0;
+            font-size: 28px;
+            color: #b8860b;
+        }
         .info-barang { margin-bottom: 30px; }
-        .info-barang h3 { margin: 0 0 15px 0; color: #b8860b; font-size: 16px; font-weight: 700; }
+        .info-barang h3 {
+            margin: 0 0 15px 0;
+            color: #b8860b;
+            font-size: 16px;
+            font-weight: 700;
+        }
         .info-table { width: 100%; border-collapse: collapse; }
         .info-table td { padding: 6px 0; }
         .info-table td.label { font-weight: 600; color: #64748b; width: 120px; }
         .info-table td.value { font-weight: 600; color: #0f172a; }
-        .section-title { font-size: 16px; font-weight: 700; margin: 0 0 15px 0; color: #0f172a; }
-        .bom-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        .bom-table th { background-color: #b8860b !important; color: white !important; padding: 12px; text-align: left; font-size: 12px; }
-        .bom-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 0 15px 0;
+            color: #0f172a;
+        }
+        .bom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .bom-table th {
+            background-color: #b8860b !important;
+            color: white !important;
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+        }
+        .bom-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
         .bom-table th.right, .bom-table td.right { text-align: right; }
         .bom-table th.center, .bom-table td.center { text-align: center; }
+
+        /* Tombol cetak — pill shape sesuai referensi */
         .print-btn {
             position: fixed;
             bottom: 30px;
@@ -71,14 +109,27 @@
             transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
             z-index: 1000;
         }
-        .print-btn:hover { background: #9a7009; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(184, 134, 11, 0.45); }
-        .print-btn:active { transform: translateY(0); }
+        .print-btn:hover {
+            background: #9a7009;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(184, 134, 11, 0.45);
+        }
+        .print-btn:active {
+            transform: translateY(0);
+        }
+
         @media print {
             .print-btn { display: none; }
             .bom-container { border: none; padding: 0; }
-            .bom-table th { background-color: #b8860b !important; color: white !important; }
-            .header { border-bottom: 3px solid #b8860b !important; }
+            .bom-table th {
+                background-color: #b8860b !important;
+                color: white !important;
+            }
+            .header {
+                border-bottom: 3px solid #b8860b !important;
+            }
         }
+
         @media (max-width: 768px) {
             .bom-container { padding: 15px; }
         }
@@ -123,7 +174,6 @@
                         <th style="width:10%;">ID Bahan</th>
                         <th style="width:35%;">Jenis Bahan</th>
                         <th style="width:10%;" class="center">Jumlah</th>
-                        <th style="width:10%;" class="center">Satuan</th>
                         <th style="width:15%;" class="right">Harga Satuan</th>
                         <th style="width:15%;" class="right">Total Harga</th>
                     </tr>
@@ -138,7 +188,6 @@
                         </td>
                         <td>{{ $item->JENIS }}</td>
                         <td class="center">{{ number_format($item->JUMLAH, 2, ',', '.') }}</td>
-                        <td class="center">{{ $item->SATUAN }}</td>
                         <td class="right">Rp {{ number_format($item->HARGA_SATUAN, 0, ',', '.') }}</td>
                         <td class="right">Rp {{ number_format($item->TOTAL_HARGA, 0, ',', '.') }}</td>
                     </tr>

@@ -294,7 +294,11 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($petugas as $p)
+                @php
+    // Ambil koleksi data, urutkan descending berdasarkan ID_PETUGAS
+    $sortedPetugas = $petugas->getCollection()->sortByDesc('ID_PETUGAS');
+@endphp
+@forelse($sortedPetugas as $p)
                 <tr>
                     <td><span class="id-badge">{{ $p->ID_PETUGAS }}</span></td>
                     <td><strong>{{ $p->NAMA_PETUGAS }}</strong></td>

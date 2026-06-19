@@ -21,19 +21,22 @@
         padding-bottom: 20px;
         border-bottom: 2px solid #f1f5f9;
     }
-    .form-header h3 { font-size: 24px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 12px; margin: 0; }
+    .form-header h3 { font-size: 24px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 12px; }
     .form-header h3 i { color: #b8860b; font-size: 28px; }
     .btn-back { background: #f1f5f9; color: #475569; padding: 10px 20px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
     .btn-back:hover { background: #e2e8f0; }
+
     .info-barang { background: #fef3c7; padding: 20px 24px; border-radius: 16px; margin-bottom: 28px; }
     .info-row { display: flex; align-items: baseline; margin-bottom: 12px; }
     .info-row:last-child { margin-bottom: 0; }
     .info-label { font-weight: 700; color: #64748b; width: 140px; font-size: 14px; }
     .info-value { color: #0f172a; font-weight: 600; font-size: 14px; }
     .info-value strong { color: #b8860b; font-size: 16px; }
+
     .form-group { margin-bottom: 24px; }
     .form-label { display: block; font-size: 14px; font-weight: 600; color: #334155; margin-bottom: 8px; }
     .form-label span { color: #ef4444; }
+
     .form-control {
         width: 100%;
         padding: 12px 16px;
@@ -46,11 +49,17 @@
         color: #0f172a;
         appearance: none;
         -webkit-appearance: none;
-        box-sizing: border-box;
     }
     .form-control:focus { outline: none; border-color: #b8860b; box-shadow: 0 0 0 3px rgba(184,134,11,0.1); }
-    .select-wrapper { position: relative; }
-    .select-wrapper select.form-control { cursor: pointer; padding-right: 40px; }
+
+    /* Wrapper untuk select + ikon panah */
+    .select-wrapper {
+        position: relative;
+    }
+    .select-wrapper select.form-control {
+        cursor: pointer;
+        padding-right: 40px;
+    }
     .select-wrapper::after {
         content: '';
         position: absolute;
@@ -64,14 +73,17 @@
         border-top: 6px solid #94a3b8;
         pointer-events: none;
     }
+
     .form-actions { display: flex; gap: 16px; margin-top: 32px; padding-top: 24px; border-top: 1px solid #f1f5f9; }
     .btn { padding: 12px 24px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s; border: none; }
     .btn-primary { background: #b8860b; color: white; }
     .btn-primary:hover { background: #9a7009; transform: translateY(-2px); }
     .btn-secondary { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
     .btn-secondary:hover { background: #e2e8f0; }
+
     .alert-error { background: #fef2f2; color: #dc2626; padding: 14px 18px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #dc2626; font-size: 14px; }
     small { display: block; margin-top: 6px; color: #94a3b8; font-size: 12px; }
+
     @media (max-width: 768px) {
         .form-container { padding: 20px; }
         .info-label { width: 110px; }
@@ -128,22 +140,6 @@
             <label class="form-label">Jumlah <span>*</span></label>
             <input type="number" step="0.01" name="jumlah" class="form-control" placeholder="Contoh: 4.5" required value="{{ old('jumlah') }}">
             <small>Jumlah bahan baku yang dibutuhkan untuk 1 unit barang</small>
-        </div>
-
-        <div class="form-group">
-            <label class="form-label">Satuan <span>*</span></label>
-            <div class="select-wrapper">
-                <select name="satuan" class="form-control" required>
-                    <option value="">Pilih Satuan</option>
-                    <option value="Meter" {{ old('satuan') == 'Meter' ? 'selected' : '' }}>Meter</option>
-                    <option value="Kg" {{ old('satuan') == 'Kg' ? 'selected' : '' }}>Kg</option>
-                    <option value="Lembar" {{ old('satuan') == 'Lembar' ? 'selected' : '' }}>Lembar</option>
-                    <option value="Roll" {{ old('satuan') == 'Roll' ? 'selected' : '' }}>Roll</option>
-                    <option value="Pcs" {{ old('satuan') == 'Pcs' ? 'selected' : '' }}>Pcs</option>
-                    <option value="Set" {{ old('satuan') == 'Set' ? 'selected' : '' }}>Set</option>
-                    <option value="Liter" {{ old('satuan') == 'Liter' ? 'selected' : '' }}>Liter</option>
-                </select>
-            </div>
         </div>
 
         <div class="form-actions">

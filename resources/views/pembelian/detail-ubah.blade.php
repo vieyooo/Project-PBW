@@ -3,7 +3,7 @@
 @section('content')
 
 <style>
-    .form-container {
+   .form-container {
         max-width: 600px; margin: 0 auto; background: #fff; border-radius: 20px;
         border: 1px solid #e2e8f0; padding: 24px 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
     }
@@ -11,7 +11,8 @@
         border-bottom: 2px dashed #f1f5f9; margin-bottom: 20px; padding-bottom: 12px;
     }
     .form-header h3 {
-        font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin: 0;
+        font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px;
+        margin: 0;
     }
     .form-header h3 i {
         color: #b8860b; background: rgba(184,134,11,0.1); padding: 8px; border-radius: 10px;
@@ -23,13 +24,20 @@
     .form-control {
         width: 100%; padding: 10px 14px; font-size: 13px;
         border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;
+        color: #000000;
     }
     .form-control:focus {
         border-color: #b8860b; outline: none; box-shadow: 0 0 0 3px rgba(184,134,11,0.1);
     }
     .form-control[readonly] {
         background: #e2e8f0; cursor: not-allowed;
+        color: #000000;
     }
+    
+    select.form-control option {
+        color: #000000;
+    }
+
     .btn {
         padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600;
         border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
@@ -53,6 +61,9 @@
     .form-actions {
         display: flex; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #f1f5f9;
     }
+    .form-hint {
+        font-size: 11px; color: #94a3b8; margin-top: 4px;
+    }
     @media (max-width: 640px) {
         .form-actions { flex-direction: column; }
         .btn { justify-content: center; }
@@ -70,7 +81,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('pembelian.detail.update', [$noInvoice, $detail->id_bahan_baku]) }}">
+    <form method="POST" action="{{ route('pembelian.detail.update', [$noInvoice, $detail->ID_BAHAN_BAKU]) }}">
         @csrf
         @method('PUT')
 
@@ -82,22 +93,27 @@
         <div class="form-group">
             <label class="form-label">ID Bahan Baku</label>
             <input type="text" class="form-control"
-                   value="{{ $detail->id_bahan_baku }} - {{ $bahan->kode ?? '-' }} ({{ $bahan->jenis ?? 'Tidak diketahui' }})"
+                   value="{{ $detail->ID_BAHAN_BAKU }} - {{ $bahan->KODE ?? '-' }} ({{ $bahan->JENIS ?? 'Tidak diketahui' }})"
                    readonly>
         </div>
 
-        <div class="form-group">
-            <label class="form-label">Qty <span style="color:red;">*</span></label>
-            <input type="number" name="qty" class="form-control" required min="1"
-                   value="{{ old('qty', $detail->qty) }}">
-        </div>
+        {{-- 1. BAGIAN INPUT QTY --}}
+<div class="form-group">
+    <label class="form-label">Qty <span style="color:red;">*</span></label>
+    {{-- UBAH name="qty" MENJADI name="QTY" --}}
+    <input type="number" name="QTY" class="form-control" required min="1"
+           value="{{ old('QTY', $detail->QTY) }}">
+    <p class="form-hint">Jumlah bahan baku yang dibeli.</p>
+</div>
 
-        <div class="form-group">
-            <label class="form-label">Harga Jual (Rp) <span style="color:red;">*</span></label>
-            <input type="number" name="harga_jual" class="form-control" required min="0" step="1000"
-                   value="{{ old('harga_jual', $detail->harga_jual) }}">
-        </div>
-
+{{-- 2. BAGIAN INPUT HARGA JUAL --}}
+<div class="form-group">
+    <label class="form-label">Harga Jual (Rp) <span style="color:red;">*</span></label>
+    {{-- UBAH name="harga_jual" MENJADI name="HARGA_JUAL" --}}
+    <input type="number" name="HARGA_JUAL" class="form-control" required min="0" step="1000"
+           placeholder="Contoh: 500000" value="{{ old('HARGA_JUAL', $detail->HARGA_JUAL) }}">
+    <p class="form-hint">Harga per unit dari supplier.</p>
+</div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i> Update

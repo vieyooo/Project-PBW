@@ -426,15 +426,17 @@
             @case('barangBOM-ubah') @include('barang.barangBOM-ubah') @break
             @case('barangBOM-hapus') @include('barang.barangBOM-hapus') @break
             
-            @case('pembelian') @include('pembelian.pembelian-lihat') @break
-            @case('pembelian-tambah') @include('pembelian.pembelian-tambah') @break
-            @case('pembelian-ubah') @include('pembelian.pembelian-ubah') @break
-            @case('pembelian-hapus') @include('pembelian.pembelian-hapus') @break
-            @case('detailpembelian-lihat') @include('pembelian.detailpembelian-lihat') @break
-            @case('detailpembelian-tambah') @include('pembelian.detailpembelian-tambah') @break
-            @case('detailpembelian-ubah') @include('pembelian.detailpembelian-ubah') @break
-            @case('detailpembelian-hapus') @include('pembelian.detailpembelian-hapus') @break
-            
+         {{-- PEMBELIAN --}}
+@case('pembelian') @include('pembelian.pembelian-lihat') @break
+@case('pembelian-tambah') @include('pembelian.pembelian-tambah') @break
+@case('pembelian-ubah') @include('pembelian.pembelian-ubah') @break
+@case('pembelian-hapus') @include('pembelian.pembelian-hapus') @break
+
+{{-- DETAIL PEMBELIAN --}}
+@case('detailpembelian-lihat') @include('pembelian.detailpembelian-lihat') @break
+@case('detailpembelian-tambah') @include('pembelian.detailpembelian-tambah') @break
+@case('detailpembelian-ubah') @include('pembelian.detailpembelian-ubah') @break
+@case('detailpembelian-hapus') @include('pembelian.detailpembelian-hapus') @break
             @case('penjualan')
             @case('penjualan-lihat') @include('penjualan.penjualan-lihat') @break
             @case('penjualan-tambah') @include('penjualan.penjualan-tambah') @break

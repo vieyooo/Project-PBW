@@ -264,7 +264,10 @@
                 <tr><th>ID Pelanggan</th><th>Nama Pelanggan</th><th>Alamat</th><th>Kontak</th><th>Aksi</th></tr>
             </thead>
             <tbody>
-                @forelse($pelanggans as $row)
+                @php
+    $sortedPelanggan = $pelanggans->getCollection()->sortByDesc('ID_PELANGGAN');
+@endphp
+@forelse($sortedPelanggan as $row)
                 <tr>
                     <td><span class="id-badge">{{ $row->ID_PELANGGAN }}</span></td>
                     <td>{{ $row->NAMA_PELANGGAN }}</td>

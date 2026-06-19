@@ -3,7 +3,7 @@
 @section('content')
 
 <style>
-    .form-container {
+ .form-container {
         max-width: 600px; margin: 0 auto; background: #fff; border-radius: 20px;
         border: 1px solid #e2e8f0; padding: 24px 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
     }
@@ -24,13 +24,20 @@
     .form-control {
         width: 100%; padding: 10px 14px; font-size: 13px;
         border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;
+        color: #000000;
     }
     .form-control:focus {
         border-color: #b8860b; outline: none; box-shadow: 0 0 0 3px rgba(184,134,11,0.1);
     }
     .form-control[readonly] {
         background: #e2e8f0; cursor: not-allowed;
+        color: #000000;
     }
+    
+    select.form-control option {
+        color: #000000;
+    }
+
     .btn {
         padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600;
         border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
@@ -84,12 +91,13 @@
 
         <div class="form-group">
             <label class="form-label">Pilih Bahan Baku <span style="color:red;">*</span></label>
-            <select name="id_bahan" class="form-control" required>
+            {{-- SUDAH DIPERBAIKI: name="ID_BAHAN_BAKU" (tanpa huruf s di ujung) --}}
+            <select name="ID_BAHAN_BAKU" class="form-control" required>
                 <option value="">-- Pilih Bahan Baku --</option>
                 @foreach($bahanBakus as $b)
-                    <option value="{{ $b->id_bahan_baku }}"
-                        {{ old('id_bahan') == $b->id_bahan_baku ? 'selected' : '' }}>
-                        {{ $b->id_bahan_baku }} - {{ $b->jenis }} ({{ $b->kode }}) - Stok: {{ $b->stok }} {{ $b->satuan }}
+                    <option value="{{ $b->ID_BAHAN_BAKU }}"
+                        {{ old('ID_BAHAN_BAKU') == $b->ID_BAHAN_BAKU ? 'selected' : '' }}>
+                        {{ $b->ID_BAHAN_BAKU }} - {{ $b->JENIS }} ({{ $b->KODE }}) - Stok: {{ $b->STOK }} {{ $b->SATUAN }}
                     </option>
                 @endforeach
             </select>
@@ -100,15 +108,17 @@
 
         <div class="form-group">
             <label class="form-label">Qty <span style="color:red;">*</span></label>
-            <input type="number" name="qty" class="form-control" required min="1"
-                   value="{{ old('qty', 1) }}">
+            {{-- DISESUAIKAN: menggunakan name="QTY" kapital --}}
+            <input type="number" name="QTY" class="form-control" required min="1"
+                   value="{{ old('QTY', 1) }}">
             <p class="form-hint">Jumlah bahan baku yang dibeli.</p>
         </div>
 
         <div class="form-group">
             <label class="form-label">Harga Jual (Rp) <span style="color:red;">*</span></label>
-            <input type="number" name="harga_jual" class="form-control" required min="0" step="1000"
-                   placeholder="Contoh: 500000" value="{{ old('harga_jual') }}">
+            {{-- DISESUAIKAN: menggunakan name="HARGA_JUAL" kapital --}}
+            <input type="number" name="HARGA_JUAL" class="form-control" required min="0" step="1000"
+                   placeholder="Contoh: 500000" value="{{ old('HARGA_JUAL') }}">
             <p class="form-hint">Harga per unit dari supplier.</p>
         </div>
 

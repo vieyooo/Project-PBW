@@ -16,7 +16,7 @@ class BarangController extends Controller
             $limit = 10;
         }
 
-        $barang = Barang::orderBy('ID_BARANG', 'asc')->paginate($limit);
+        $barang = Barang::orderBy('ID_BARANG', 'desc')->paginate($limit);
 
         return view('barang.index', compact('barang'));
     }
@@ -63,7 +63,7 @@ class BarangController extends Controller
             'HARGA_SATUAN' => $harga,
         ]);
 
-        return redirect()->route('barang.index')->with('success', 'Data barang baru telah ditambahkan.');
+        return redirect()->route('barang.bom.index', $id_otomatis)->with('success', 'tambah');
     }
 
     public function edit(Barang $barang)
@@ -98,6 +98,10 @@ class BarangController extends Controller
             return redirect()->route('barang.index')
                 ->with('error', 'Gagal menghapus! Barang ini sudah pernah terjual. Hapus transaksi penjualan terlebih dahulu.');
         }
+
+        // Hapus dulu semua data BOM (bahan baku) yang terkait dengan barang ini
+        // supaya tidak melanggar foreign key constraint bom_ibfk_1
+        DB::table('bom')->where('ID_BARANG', $barang->ID_BARANG)->delete();
 
         $barang->delete();
 

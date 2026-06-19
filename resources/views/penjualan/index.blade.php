@@ -106,7 +106,10 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($penjualans as $row)
+@php
+    $sortedPenjualan = $penjualans->getCollection()->sortByDesc('ID_PENJUALAN');
+@endphp
+@forelse($sortedPenjualan as $row)
                 <tr>
                     <td><span class="id-badge">{{ $row->ID_PENJUALAN }}</span></td>
                     <td>{{ \Carbon\Carbon::parse($row->TANGGAL)->format('d/m/Y') }}</td>

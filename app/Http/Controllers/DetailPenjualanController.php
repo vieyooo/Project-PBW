@@ -42,110 +42,126 @@ class DetailPenjualanController extends Controller
 
     // Simpan detail
     public function store(Request $request)
-    {
-        $request->validate([
-            'ID_PENJUALAN' => 'required',
-            'ID_BARANG' => 'required',
-            'QTY' => 'required|numeric|min:1',
-        ]);
-
-        $id_penjualan = $request->ID_PENJUALAN;
-        $id_barang = $request->ID_BARANG;
-        $qty = (int) $request->QTY;
-
-        // Ambil harga barang
-        $barang = Barang::findOrFail($id_barang);
-        $harga_satuan = $barang->HARGA_SATUAN;
-        $jumlah = $qty * $harga_satuan;
-
-        // Insert detail
-        DetailPenjualan::create([
-            'ID_PENJUALAN' => $id_penjualan,
-            'ID_BARANG' => $id_barang,
-            'QTY' => $qty,
-            'JUMLAH' => $jumlah
-        ]);
-
-        // Kurangi stok bahan baku berdasarkan BOM
-        $boms = Bom::where('ID_BARANG', $id_barang)->get();
-        foreach ($boms as $bom) {
-            $bahan = BahanBaku::findOrFail($bom->ID_BAHAN_BAKU);
-            $bahan_terpakai = $qty * $bom->JUMLAH;
-            $bahan->STOK = $bahan->STOK - $bahan_terpakai;
-            $bahan->save();
-        }
-
-        return redirect()->route('detailpenjualan.index', ['id' => $id_penjualan])
-                         ->with('success', 'Berhasil menambahkan barang & stok bahan baku otomatis berkurang!');
+{
+    // Ambil ID_PENJUALAN dari request, jika kosong coba ambil dari parameter 'id' (jika ada di URL)
+    $id_penjualan = $request->input('ID_PENJUALAN');
+    if (empty($id_penjualan)) {
+        // Coba dari query string 'id' atau dari route parameter
+        $id_penjualan = $request->query('id') ?? $request->route('id');
     }
 
+    // Jika tetap kosong, coba ambil dari session atau generate (tapi seharusnya sudah ada)
+    if (empty($id_penjualan)) {
+        return back()->withErrors(['ID_PENJUALAN' => 'ID Penjualan tidak ditemukan.']);
+    }
+
+    // Validasi (tanpa required ID_PENJUALAN karena sudah kita tangani)
+    $request->validate([
+        'ID_BARANG' => 'required|exists:barang,ID_BARANG',
+        'QTY' => 'required|numeric|min:1',
+    ]);
+
+    // Proses simpan detail...
+    $id_barang = $request->ID_BARANG;
+    $qty = (int) $request->QTY;
+
+    $barang = Barang::findOrFail($id_barang);
+    $harga_satuan = $barang->HARGA_SATUAN;
+    $jumlah = $qty * $harga_satuan;
+
+    DetailPenjualan::create([
+        'ID_PENJUALAN' => $id_penjualan,
+        'ID_BARANG' => $id_barang,
+        'QTY' => $qty,
+        'JUMLAH' => $jumlah
+    ]);
+
+    // Kurangi stok bahan baku...
+    $boms = Bom::where('ID_BARANG', $id_barang)->get();
+    foreach ($boms as $bom) {
+        $bahan = BahanBaku::findOrFail($bom->ID_BAHAN_BAKU);
+        $bahan_terpakai = $qty * $bom->JUMLAH;
+        $bahan->STOK = $bahan->STOK - $bahan_terpakai;
+        $bahan->save();
+    }
+
+    return redirect()->route('detailpenjualan.index', ['id' => $id_penjualan])
+                     ->with('success', 'Item berhasil ditambahkan.');
+}
+  
     // Form edit detail
-    public function edit(Request $request)
-    {
-        $id_penjualan = $request->get('id');
-        $id_barang = $request->get('barang');
+   public function edit(Request $request)
+{
+    $id_penjualan = $request->query('id_penjualan');
+    $id_barang = $request->query('id_barang');
+    
+    $penjualan = Penjualan::findOrFail($id_penjualan);
+    $detail = DetailPenjualan::where('ID_PENJUALAN', $id_penjualan)
+                ->where('ID_BARANG', $id_barang)
+                ->firstOrFail();
+                
+    return view('penjualan.detail.edit', compact('penjualan', 'detail'));
+}
 
-        $detail = DetailPenjualan::where('ID_PENJUALAN', $id_penjualan)
-            ->where('ID_BARANG', $id_barang)
-            ->firstOrFail();
+    public function update(Request $request)
+{
+    $id_penjualan = $request->query('id_penjualan');
+    $id_barang = $request->query('id_barang');
 
-        $barang = Barang::findOrFail($id_barang);
-
-        return view('penjualan.detail.edit', compact('detail', 'barang', 'id_penjualan'));
+    if (empty($id_penjualan) || empty($id_barang)) {
+        return back()->withErrors(['error' => 'ID Penjualan atau ID Barang tidak ditemukan.']);
     }
 
-    // Update detail
-    public function update(Request $request)
-    {
-        $request->validate([
-            'QTY' => 'required|numeric|min:1',
-            'HARGA_SATUAN' => 'required|numeric|min:0',
-        ]);
+    $request->validate([
+        'QTY' => 'required|numeric|min:1',
+        'HARGA_SATUAN' => 'required|numeric|min:0',
+    ]);
 
-        $id_penjualan = $request->ID_PENJUALAN;
-        $id_barang = $request->ID_BARANG;
+    // Update langsung dengan kondisi
+    $affected = DetailPenjualan::where('ID_PENJUALAN', $id_penjualan)
+                ->where('ID_BARANG', $id_barang)
+                ->update([
+                    'QTY' => $request->QTY,
+                    'JUMLAH' => $request->QTY * $request->HARGA_SATUAN,
+                ]);
 
-        $detail = DetailPenjualan::where('ID_PENJUALAN', $id_penjualan)
-            ->where('ID_BARANG', $id_barang)
-            ->firstOrFail();
-
-        $qty = (int) $request->QTY;
-        $harga_satuan = (float) $request->HARGA_SATUAN;
-        $jumlah = $qty * $harga_satuan;
-
-        $detail->QTY = $qty;
-        $detail->JUMLAH = $jumlah;
-        $detail->save();
-
+    if ($affected) {
         return redirect()->route('detailpenjualan.index', ['id' => $id_penjualan])
                          ->with('success', 'Detail berhasil diupdate.');
+    } else {
+        return back()->withErrors(['error' => 'Data tidak ditemukan atau tidak ada perubahan.']);
     }
-
+}
     // Hapus detail
     public function destroy(Request $request)
-    {
-        $id_penjualan = $request->get('id');
-        $id_barang = $request->get('barang');
+{
+    $id_penjualan = $request->query('id_penjualan');
+    $id_barang = $request->query('id_barang');
 
-        $detail = DetailPenjualan::where('ID_PENJUALAN', $id_penjualan)
-            ->where('ID_BARANG', $id_barang)
-            ->firstOrFail();
-        $detail->delete();
+    if (empty($id_penjualan) || empty($id_barang)) {
+        return back()->withErrors(['error' => 'ID Penjualan atau ID Barang tidak ditemukan.']);
+    }
 
+    $deleted = DetailPenjualan::where('ID_PENJUALAN', $id_penjualan)
+                ->where('ID_BARANG', $id_barang)
+                ->delete();
+
+    if ($deleted) {
         return redirect()->route('detailpenjualan.index', ['id' => $id_penjualan])
-                         ->with('success', 'Detail barang berhasil dihapus.');
+                         ->with('success', 'Item berhasil dihapus.');
+    } else {
+        return back()->withErrors(['error' => 'Item tidak ditemukan.']);
     }
+}
 
-    // Cetak invoice
-    public function cetak(Request $request)
-    {
-        $id = $request->get('id');
-        $penjualan = Penjualan::with(['petugas', 'pelanggan'])->findOrFail($id);
-        $detail = DetailPenjualan::with('barang')
-            ->where('ID_PENJUALAN', $id)
-            ->orderBy('ID_BARANG', 'asc')
-            ->get();
+    public function cetakInvoice($id)
+{
+    $penjualan = Penjualan::with(['pelanggan', 'petugas'])->findOrFail($id);
+    $detail = DetailPenjualan::with('barang')
+                ->where('ID_PENJUALAN', $id)
+                ->orderBy('ID_BARANG', 'asc')
+                ->get();
 
-        return view('penjualan.detail.cetak', compact('penjualan', 'detail'));
-    }
+    return view('penjualan.detail.cetak', compact('penjualan', 'detail'));
+}
 }

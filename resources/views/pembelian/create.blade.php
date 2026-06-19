@@ -10,347 +10,361 @@
     }
 
     body {
-        background: #f8f5f0;
-        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-        padding: 2rem 1.5rem;
-        color: #2c2418;
+        font-family: 'Inter', sans-serif;
+        background: #f1f5f9;
+        padding: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
     }
 
     .form-container {
-        max-width: 760px;
-        margin: 0 auto;
-        background: #ffffff;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.02);
-        border-radius: 0;
-        overflow: hidden;
+        max-width: 900px;
+        width: 100%;
+        background: #fff;
+        border-radius: 20px;
+        border: 1px solid #e2e8f0;
+        padding: 28px 36px 32px 36px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
     }
 
     .form-header {
-        padding: 1.5rem 2rem;
-        border-bottom: 1px solid #f0e6d2;
-        background: #ffffff;
+        margin-bottom: 24px;
     }
-
-    .form-header h2 {
-        font-size: 1.6rem;
-        font-weight: 600;
-        color: #b8860b;
-        letter-spacing: -0.2px;
+    .form-header h3 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #0f172a;
         margin: 0;
     }
 
-    .form-body {
-        padding: 1.8rem 2rem 2rem 2rem;
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-label {
+        display: block;
+        font-weight: 600;
+        font-size: 13px;
+        color: #334155;
+        margin-bottom: 5px;
+    }
+    .form-label .required {
+        color: #ef4444;
+    }
+    .form-label .optional {
+        color: #94a3b8;
+        font-weight: 400;
+        font-size: 12px;
     }
 
-    .form-group {
-        margin-bottom: 1.6rem;
-        display: flex;
-        flex-direction: column;
+    .form-control {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        color: #000000;
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        transition: 0.2s;
+        outline: none;
+    }
+    .form-control:focus {
+        border-color: #b8860b;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(184,134,11,0.1);
+    }
+    .form-control[readonly] {
+        background: #e2e8f0;
+        color: #000000;
+        cursor: not-allowed;
+    }
+    select.form-control {
+        cursor: pointer;
+    }
+    .form-hint {
+        font-size: 11px;
+        color: #94a3b8;
+        margin-top: 4px;
     }
 
     .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .computed-box {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin-bottom: 20px;
+        font-size: 13px;
+    }
+    .computed-box p {
+        margin: 0 0 4px 0;
+        color: #166534;
         display: flex;
-        gap: 1.5rem;
-        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .computed-box p:last-child {
+        margin: 0;
+        font-weight: 700;
     }
 
-    .form-row .form-group {
-        flex: 1;
-        min-width: 180px;
-    }
-
-    label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #5e4b2b;
-        margin-bottom: 0.45rem;
-        letter-spacing: 0.3px;
-    }
-
-    label .required-star {
-        color: #d4af37;
-        margin-left: 2px;
-    }
-
-    input, select {
-        width: 100%;
-        padding: 0.7rem 0.9rem;
-        font-size: 0.95rem;
-        font-family: inherit;
-        border: 1px solid #e2d5bd;
-        border-radius: 0px;
-        background-color: #ffffff;
-        transition: 0.2s;
-        color: #2c2418;
-    }
-
-    input:focus, select:focus {
-        outline: none;
-        border-color: #d4af37;
-        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
-    }
-
-    .custom-file-upload {
+    .file-input-wrapper {
         position: relative;
         display: inline-block;
         width: 100%;
     }
-
-    .custom-file-upload input[type="file"] {
-        position: absolute;
-        left: 0;
-        top: 0;
-        opacity: 0;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-        z-index: 2;
-    }
-
-    .file-upload-label {
+    .file-input-label {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        background-color: #ffffff;
-        border: 1px solid #d4af37;
-        border-radius: 0px;
-        padding: 0.7rem 0.9rem;
+        justify-content: center;
+        padding: 10px 14px;
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
         cursor: pointer;
+        font-size: 14px;
+        color: #475569;
         transition: 0.2s;
-        font-size: 0.95rem;
-        color: #b8860b;
-        font-weight: 500;
+    }
+    .file-input-label:hover {
+        background: #f1f5f9;
+        border-color: #b8860b;
+    }
+    .file-name {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #64748b;
+        text-align: center;
+    }
+    .scan-preview {
+        margin-top: 10px;
+        max-width: 150px;
+        display: none;
+    }
+    .scan-preview img {
+        width: 100%;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 5px;
+        background: #f8fafc;
     }
 
-    .file-upload-label span:first-child {
-        color: #b8860b;
-    }
-
-    .file-upload-label span:last-child {
-        color: #8b7a62;
-        font-size: 0.85rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        max-width: 60%;
-    }
-
-    .file-upload-label:hover {
-        background-color: #fff8e7;
-        border-color: #c9a03d;
-    }
-
-    .help-text {
-        font-size: 0.7rem;
-        color: #8b7a62;
-        margin-top: 0.4rem;
-        line-height: 1.4;
-    }
-
-    .button-group {
+    .form-actions {
         display: flex;
-        gap: 1rem;
-        margin-top: 2rem;
-        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #f1f5f9;
     }
 
-    .btn-primary {
-        background-color: #d4af37;
-        border: none;
-        padding: 0.75rem 1.8rem;
-        border-radius: 0px;
-        font-weight: 700;
-        font-size: 0.9rem;
-        color: #2c2418;
-        cursor: pointer;
-        transition: all 0.2s;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-
-    .btn-primary:hover {
-        background-color: #b38f2a;
-        color: white;
-    }
-
-    .btn-secondary {
-        background-color: transparent;
-        border: 1px solid #d4af37;
-        padding: 0.75rem 1.8rem;
-        border-radius: 0px;
+    .btn {
+        padding: 10px 28px;
+        border-radius: 8px;
+        font-size: 14px;
         font-weight: 600;
-        font-size: 0.9rem;
-        color: #b8860b;
+        border: none;
         cursor: pointer;
+        font-family: 'Inter', sans-serif;
         transition: 0.2s;
+        text-decoration: none;
+        display: inline-block;
     }
-
+    .btn-primary {
+        background: #b8860b;
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(184,134,11,0.2);
+    }
+    .btn-primary:hover {
+        background: #9a7009;
+        transform: translateY(-1px);
+    }
+    .btn-secondary {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+    }
     .btn-secondary:hover {
-        background-color: #fff8e7;
-        border-color: #c9a03d;
+        background: #e2e8f0;
+        color: #1e293b;
     }
 
-    @media (max-width: 600px) {
-        .form-body { padding: 1.5rem; }
-        .form-header { padding: 1rem 1.5rem; }
-        .form-header h2 { font-size: 1.4rem; }
+    .alert-error {
+        background: #fef2f2;
+        color: #dc2626;
+        padding: 10px 14px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        border-left: 4px solid #dc2626;
+    }
+
+    @media (max-width:640px) {
+        body { padding: 16px; }
+        .form-container { padding: 20px; }
+        .form-row { grid-template-columns: 1fr; }
+        .form-actions { flex-direction: column; }
+        .btn { width: 100%; text-align: center; justify-content: center; }
     }
 </style>
 
 <div class="form-container">
     <div class="form-header">
-        <h2>Tambah Pembelian</h2>
+        <h3>Form Tambah Pembelian</h3>
     </div>
-    <div class="form-body">
-        <form id="formTambahPembelian" method="POST" action="{{ route('pembelian.store') }}" enctype="multipart/form-data">
-            @csrf
 
-            <!-- Baris No Invoice & Tanggal -->
-            <div class="form-row">
-                <div class="form-group">
-                    <label>No. Invoice</label>
-                    <input type="text" name="NO_INVOICE" value="{{ old('NO_INVOICE', 'PO-6012') }}"
-                           placeholder="No. Invoice" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label>Tanggal <span class="required-star">*</span></label>
-                    <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" required>
-                </div>
-            </div>
+    @if($errors->any())
+        <div class="alert-error">
+            <i class="fas fa-exclamation-triangle"></i> {{ $errors->first() }}
+        </div>
+    @endif
 
-            <!-- Supplier -->
+    <form method="POST" action="{{ route('pembelian.store') }}" enctype="multipart/form-data">
+        @csrf
+
+        <div class="form-group">
+            <label class="form-label">No. Invoice</label>
+           <input type="text" name="NO_INVOICE" class="form-control" value="{{ $newNumber }}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Tanggal <span class="required">*</span></label>
+            <input type="date" name="TANGGAL" class="form-control" value="{{ old('TANGGAL', date('Y-m-d')) }}" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Supplier <span class="required">*</span></label>
+            <select name="ID_SUPPLIER" class="form-control" required>
+                <option value="">-- Pilih Supplier --</option>
+                @foreach($suppliers as $s)
+                    <option value="{{ $s->ID_SUPPLIER }}" {{ old('id_supplier') == $s->ID_SUPPLIER ? 'selected' : '' }}>
+                        {{ $s->NAMA_SUPPLIER }} ({{ $s->ID_SUPPLIER }})
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Jumlah Harga (Rp) <span class="required">*</span></label>
+            <input type="number" name="JUMLAH_HARGA" id="jumlah_harga" class="form-control"
+       placeholder="Contoh: 8000000" value="{{ old('JUMLAH_HARGA') }}"
+       min="0" step="1" required oninput="hitungOtomatis()">
+            <div class="form-hint">Harga barang sebelum ongkos kirim dan diskon.</div>
+        </div>
+
+        <div class="form-row">
             <div class="form-group">
-                <label>Supplier <span class="required-star">*</span></label>
-                <select name="supplier" required>
-                    <option value="" disabled selected>-- Pilih Supplier --</option>
-                    @foreach($suppliers as $supplier)
-                        <option value="{{ $supplier->id_supplier }}"
-                            {{ old('supplier') == $supplier->id_supplier ? 'selected' : '' }}>
-                            {{ $supplier->id_supplier }} - {{ $supplier->nama_supplier }}
-                        </option>
-                    @endforeach
-                </select>
+                <label class="form-label">Ongkos Kirim (Rp) <span class="optional">(opsional)</span></label>
+                <input type="number" name="ONGKOS_KIRIM" id="ongkos_kirim" class="form-control"
+       value="{{ old('ONGKOS_KIRIM', '0') }}" min="0" step="1" oninput="hitungOtomatis()">
             </div>
-
-            <!-- Jumlah Harga -->
             <div class="form-group">
-                <label>Jumlah Harga (Rp) <span class="required-star">*</span></label>
-                <input type="text" name="jumlah_harga" placeholder="Contoh: 8000000"
-                       value="{{ old('jumlah_harga') }}" inputmode="numeric">
-                <div class="help-text">Harga barang sebelum ongkos kirim dan diskon.</div>
+                <label class="form-label">Diskon (Rp) <span class="optional">(opsional)</span></label>
+                <input type="number" name="DISKON" id="diskon" class="form-control"
+       value="{{ old('DISKON', '0') }}" min="0" step="1" oninput="hitungOtomatis()">
             </div>
+        </div>
 
-            <!-- Ongkos Kirim & Diskon -->
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Ongkos Kirim (Rp) (opsional)</label>
-                    <input type="text" name="ongkos_kirim" placeholder="0"
-                           value="{{ old('ongkos_kirim', '0') }}" inputmode="numeric">
-                </div>
-                <div class="form-group">
-                    <label>Diskon (Rp) (opsional)</label>
-                    <input type="text" name="diskon" placeholder="0"
-                           value="{{ old('diskon', '0') }}" inputmode="numeric">
-                </div>
-            </div>
+        <div class="computed-box" id="kalkulasiBox" style="display:none;">
+            <p><span>Jumlah Harga</span> <span id="show_jumlah">Rp 0</span></p>
+            <p><span>Nilai DPP (100/111)</span> <span id="show_dpp">Rp 0</span></p>
+            <p><span>PPN 11%</span> <span id="show_ppn">Rp 0</span></p>
+            <p><span>Ongkos Kirim</span> <span id="show_ongkir">Rp 0</span></p>
+            <p><span>Diskon</span> <span id="show_diskon">- Rp 0</span></p>
+            <p><span>Total Invoice</span> <span id="show_total">Rp 0</span></p>
+        </div>
 
-            <!-- Upload Scan Nota -->
-            <div class="form-group">
-                <label>Scan Nota (Maks 2MB)</label>
-                <div class="custom-file-upload">
-                    <input type="file" name="scan_nota" accept=".jpg,.jpeg,.png" id="fileScanNota">
-                    <div class="file-upload-label" id="fileUploadLabel">
-                        <span>Pilih File Scan Nota</span>
-                        <span id="fileNameDisplay">Belum ada file</span>
-                    </div>
-                </div>
-                <div class="help-text">
-                    Format: JPG, JPEG, PNG. Maksimal 2MB. File akan disimpan di folder img/scan_nota/
-                </div>
+        <div class="form-group">
+            <label class="form-label">Scan Nota (Maks 2MB)</label>
+            <div class="file-input-wrapper">
+                <label class="file-input-label" for="scan-nota-input">
+                    <i class="fas fa-upload"></i> Pilih File Scan Nota
+                </label>
+                <input type="file" name="scan_nota" id="scan-nota-input" accept=".jpg,.jpeg,.png" style="display:none;">
             </div>
+            <div class="file-name" id="file-name" style="display:none;">
+                <i class="fas fa-check-circle"></i> <span id="selected-file"></span>
+            </div>
+            <div class="scan-preview" id="scan-preview">
+                <img id="preview-img" src="#" alt="Preview Scan Nota">
+            </div>
+            <div class="form-hint">
+                <i class="fas fa-info-circle"></i> Format: JPG, JPEG, PNG. Maksimal 2MB. File akan disimpan di folder img/scan_nota/
+            </div>
+        </div>
 
-            <!-- Tombol aksi -->
-            <div class="button-group">
-                <button type="submit" class="btn-primary">Simpan Data</button>
-                <button type="button" class="btn-secondary" id="btnBatal">Batal / Kembali</button>
-            </div>
-        </form>
-    </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Simpan Data</button>
+            <a href="{{ route('pembelian.index') }}" class="btn btn-secondary">Batal</a>
+        </div>
+    </form>
 </div>
 
 <script>
-(function() {
-    const fileInput = document.getElementById('fileScanNota');
-    const fileNameSpan = document.getElementById('fileNameDisplay');
+function formatRupiah(angka) {
+    return 'Rp ' + Math.round(angka).toLocaleString('id-ID');
+}
 
-    if (fileInput && fileNameSpan) {
-        fileInput.addEventListener('change', function() {
-            if (fileInput.files.length > 0) {
-                fileNameSpan.textContent = fileInput.files[0].name;
-            } else {
-                fileNameSpan.textContent = 'Belum ada file';
-            }
-        });
+function hitungOtomatis() {
+    const jumlah = parseFloat(document.getElementById('jumlah_harga').value) || 0;
+    const ongkir = parseFloat(document.getElementById('ongkos_kirim').value) || 0;
+    const diskon = parseFloat(document.getElementById('diskon').value) || 0;
+
+    if (jumlah > 0) {
+        const dpp = jumlah * (100 / 111);
+        const ppn = jumlah - dpp;
+        const total = (dpp + ppn + ongkir) - diskon;
+
+        document.getElementById('show_jumlah').textContent = formatRupiah(jumlah);
+        document.getElementById('show_dpp').textContent = formatRupiah(dpp);
+        document.getElementById('show_ppn').textContent = formatRupiah(ppn);
+        document.getElementById('show_ongkir').textContent = formatRupiah(ongkir);
+        document.getElementById('show_diskon').textContent = '- ' + formatRupiah(diskon);
+        document.getElementById('show_total').textContent = formatRupiah(total);
+        document.getElementById('kalkulasiBox').style.display = 'block';
+    } else {
+        document.getElementById('kalkulasiBox').style.display = 'none';
     }
+}
 
-    const btnBatal = document.getElementById('btnBatal');
-    if (btnBatal) {
-        btnBatal.addEventListener('click', function() {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                const form = document.getElementById('formTambahPembelian');
-                if (form) form.reset();
-                const invoiceField = document.querySelector('input[name="NO_INVOICE"]');
-                const tglField = document.querySelector('input[name="tanggal"]');
-                const ongkirField = document.querySelector('input[name="ongkos_kirim"]');
-                const diskonField = document.querySelector('input[name="diskon"]');
-                if (invoiceField) invoiceField.value = 'PO-6012';
-                if (tglField) tglField.value = '{{ date("Y-m-d") }}';
-                if (ongkirField) ongkirField.value = '0';
-                if (diskonField) diskonField.value = '0';
-                if (fileNameSpan) fileNameSpan.textContent = 'Belum ada file';
-                if (fileInput) fileInput.value = '';
-                alert('Form telah direset.');
-            }
-        });
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    hitungOtomatis();
+});
 
-    const form = document.getElementById('formTambahPembelian');
-    if (form) {
-        form.addEventListener('submit', function(event) {
-            if (fileInput && fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-                const maxSize = 2 * 1024 * 1024;
-                if (!allowedTypes.includes(file.type)) {
-                    alert('Format file tidak didukung. Harap unggah file JPG, JPEG, atau PNG.');
-                    event.preventDefault();
-                    return false;
-                }
-                if (file.size > maxSize) {
-                    alert('Ukuran file melebihi 2MB. Silakan pilih file yang lebih kecil.');
-                    event.preventDefault();
-                    return false;
-                }
-            }
+// File input handler
+const scanInput = document.getElementById('scan-nota-input');
+const fileNameSpan = document.getElementById('selected-file');
+const fileNameDiv = document.getElementById('file-name');
+const previewDiv = document.getElementById('scan-preview');
+const previewImg = document.getElementById('preview-img');
 
-            const jumlahHarga = document.querySelector('input[name="jumlah_harga"]');
-            if (jumlahHarga && !jumlahHarga.value.trim()) {
-                alert('Jumlah Harga harus diisi.');
-                event.preventDefault();
-                return false;
-            }
+if (scanInput) {
+    scanInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            fileNameSpan.textContent = file.name;
+            fileNameDiv.style.display = 'block';
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                previewImg.src = event.target.result;
+                previewDiv.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            fileNameDiv.style.display = 'none';
+            previewDiv.style.display = 'none';
+        }
+    });
+}
 
-            const supplierSelect = document.querySelector('select[name="supplier"]');
-            if (supplierSelect && (!supplierSelect.value || supplierSelect.value === '')) {
-                alert('Silakan pilih Supplier terlebih dahulu.');
-                event.preventDefault();
-                return false;
-            }
-        });
-    }
-})();
+document.querySelector('.file-input-label').addEventListener('click', function() {
+    if (scanInput) scanInput.click();
+});
 </script>
 
 @endsection

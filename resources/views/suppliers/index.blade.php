@@ -267,7 +267,10 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($suppliers as $s)
+                @php
+    $sortedSuppliers = $suppliers->getCollection()->sortByDesc('ID_SUPPLIER');
+@endphp
+@forelse($sortedSuppliers as $s)
                 <tr>
                     <td class="nowrap-text"><span class="id-badge">{{ $s->ID_SUPPLIER }}</span></td>
                     <td class="supplier-name">{{ $s->NAMA_SUPPLIER }}</td>

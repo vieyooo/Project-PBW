@@ -39,8 +39,6 @@
     }
     .btn-back { background: #f1f5f9; color: #475569; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
     .btn-back:hover { background: #e2e8f0; }
-    .btn-cetak { background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.2s; margin-left: 10px; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-cetak:hover { background: #0f172a; color: white; }
     .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .info-pembelian { background: #fef3c7; padding: 20px; border-radius: 12px; margin-bottom: 16px; }
     .info-row { margin-bottom: 10px; }
@@ -55,7 +53,6 @@
         width: 100%;
         border-collapse: collapse;
         text-align: left;
-        border: 1px #0f172a;
     }
     .data-table thead th {
         background-color: #b8870bf2;
@@ -101,7 +98,6 @@
         .section-title { flex-direction: column; align-items: flex-start; gap: 12px; }
         .btn-primary { width: 100%; justify-content: center; }
         .header-actions { width: 100%; justify-content: space-between; }
-        .btn-cetak, .btn-back { flex: 1; justify-content: center; margin: 0; }
     }
 </style>
 
@@ -122,15 +118,15 @@
         </div>
         <div class="info-row">
             <span class="info-label">TANGGAL</span>
-            <span class="info-value">{{ \Carbon\Carbon::parse($pembelian->tanggal)->format('d M Y') }}</span>
+            <span class="info-value">{{ \Carbon\Carbon::parse($pembelian->TANGGAL)->format('d M Y') }}</span>
         </div>
         <div class="info-row">
             <span class="info-label">SUPPLIER</span>
-            <span class="info-value">{{ $pembelian->nama_supplier ?? '-' }}</span>
+            <span class="info-value">{{ $pembelian->supplier->NAMA_SUPPLIER ?? '-' }}</span>
         </div>
         <div class="info-row">
             <span class="info-label">TOTAL INVOICE</span>
-            <span class="info-value">Rp {{ number_format($pembelian->total_invoice, 0, ',', '.') }}</span>
+            <span class="info-value">Rp {{ number_format($pembelian->TOTAL_INVOICE, 0, ',', '.') }}</span>
         </div>
     </div>
 
@@ -141,7 +137,7 @@
         </a>
     </div>
 
-    @if($details->count() > 0)
+    @if(isset($details) && $details->count() > 0)
         @php $grandTotal = 0; @endphp
         <div class="table-responsive">
             <table class="data-table">
@@ -160,24 +156,30 @@
                 <tbody>
                     @foreach($details as $row)
                         @php
-                            $subtotal = $row->qty * $row->harga_jual;
+                            // NAMA KOLOM DIUBAH MENJADI HURUF BESAR: QTY & HARGA_JUAL
+                            $subtotal = $row->QTY * $row->HARGA_JUAL;
                             $grandTotal += $subtotal;
                         @endphp
                         <tr>
-                            <td><strong>{{ $row->id_bahan_baku }}</strong></td>
-                            <td>{{ $row->kode }}</td>
-                            <td>{{ $row->jenis }}</td>
-                            <td>{{ $row->satuan }}</td>
-                            <td style="text-align: center;">{{ number_format($row->qty, 0, ',', '.') }}</td>
-                            <td>Rp {{ number_format($row->harga_jual, 0, ',', '.') }}</td>
+                            {{-- NAMA KOLOM DIUBAH MENJADI HURUF BESAR: ID_BAHAN_BAKU --}}
+                            <td><strong>{{ $row->ID_BAHAN_BAKU }}</strong></td>
+                            
+                            {{-- MENGAMBIL DARI RELASI BAHAN BAKU JIKA ADA (KODE, JENIS, SATUAN) --}}
+                            <td>{{ $row->bahanBaku->KODE ?? $row->KODE ?? '-' }}</td>
+                            <td>{{ $row->bahanBaku->JENIS ?? $row->JENIS ?? '-' }}</td>
+                            <td>{{ $row->bahanBaku->SATUAN ?? $row->SATUAN ?? '-' }}</td>
+                            
+                            {{-- NAMA KOLOM DIUBAH MENJADI HURUF BESAR: QTY & HARGA_JUAL --}}
+                            <td style="text-align: center;">{{ number_format($row->QTY, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($row->HARGA_JUAL, 0, ',', '.') }}</td>
                             <td><strong>Rp {{ number_format($subtotal, 0, ',', '.') }}</strong></td>
                             <td>
                                 <div class="action-buttons">
-                                    <a href="{{ route('pembelian.detail.edit', [$pembelian->NO_INVOICE, $row->id_bahan_baku]) }}"
+                                    <a href="{{ route('pembelian.detail.edit', [$pembelian->NO_INVOICE, $row->ID_BAHAN_BAKU]) }}"
                                        class="btn-action btn-edit">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
-                                    <form action="{{ route('pembelian.detail.destroy', [$pembelian->NO_INVOICE, $row->id_bahan_baku]) }}"
+                                    <form action="{{ route('pembelian.detail.destroy', [$pembelian->NO_INVOICE, $row->ID_BAHAN_BAKU]) }}"
                                           method="POST" style="width:100%;"
                                           onsubmit="return confirm('Yakin hapus item ini?')">
                                         @csrf

@@ -15,7 +15,7 @@ class SupplierController extends Controller
             $limit = 10;
         }
 
-        $suppliers = Supplier::orderBy('ID_SUPPLIER', 'asc')->paginate($limit);
+        $suppliers = Supplier::orderBy('ID_SUPPLIER', 'desc')->paginate($limit);
 
         return view('suppliers.index', compact('suppliers'));
     }

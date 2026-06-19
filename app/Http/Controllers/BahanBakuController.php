@@ -15,7 +15,7 @@ class BahanBakuController extends Controller
             $limit = 10;
         }
 
-        $bahanBaku = BahanBaku::orderBy('ID_BAHAN_BAKU', 'asc')->paginate($limit);
+        $bahanBaku = BahanBaku::orderBy('ID_BAHAN_BAKU', 'desc')->paginate($limit);
 
         return view('bahan-bakus.index', compact('bahanBaku'));
     }

@@ -38,7 +38,6 @@ class BarangBomController extends Controller
         $request->validate([
             'id_bahan' => 'required|string',
             'jumlah'   => 'required|numeric|min:0.01',
-            'satuan'   => 'required|string',
         ]);
 
         $exists = DB::table('bom')

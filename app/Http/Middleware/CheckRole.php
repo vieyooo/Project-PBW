@@ -17,10 +17,10 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        // 2. Ambil jabatan user yang sedang login
+        // 2. Ambil jabatan user yang sedang login (dari kolom JABATAN)
         $jabatanUser = Auth::user()->JABATAN;
 
-        // 3. COCOKKAN MENGGUNAKAN KATA KUNCI (Mencegah masalah karakter baris baru di phpMyAdmin)
+        // 3. COCOKKAN MENGGUNAKAN KATA KUNCI
         $izinkanAkses = false;
         foreach ($roles as $role) {
             if (Str::contains(strtolower($jabatanUser), strtolower($role))) {

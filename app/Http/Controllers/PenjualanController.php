@@ -58,7 +58,7 @@ class PenjualanController extends Controller
             $query->where('SISA_TAGIHAN', '>', 0);
         }
 
-        $penjualans = $query->orderBy('ID_PENJUALAN', 'asc')->paginate($limit);
+        $penjualans = $query->orderBy('ID_PENJUALAN', 'desc')->paginate($limit);
         $penjualans->appends(['limit' => $limit, 'status' => $status_filter]);
 
         return view('penjualan.index', compact('penjualans', 'status_filter'));
@@ -83,36 +83,62 @@ class PenjualanController extends Controller
     }
 
     // Simpan data
-    public function store(Request $request)
-    {
-        $request->validate([
-            'ID_PENJUALAN' => 'required|unique:penjualan',
-            'TANGGAL' => 'required|date',
-            'JATUH_TEMPO' => 'required|date',
-            'ID_PETUGAS' => 'required',
-            'ID_PELANGGAN' => 'required',
-            'SUBTOTAL' => 'required|numeric|min:0',
-            'DISKON' => 'nullable|numeric|min:0',
-            'SISA_TAGIHAN' => 'required|numeric|min:0',
-            'PESAN' => 'nullable',
-        ]);
+   public function store(Request $request)
+{
+    // =============================================
+    // 1. VALIDASI (ID_PENJUALAN TIDAK DIREQUIRE)
+    // =============================================
+    $request->validate([
+        'TANGGAL'       => 'required|date',
+        'JATUH_TEMPO'   => 'required|date',
+        'ID_PETUGAS'    => 'required',
+        'ID_PELANGGAN'  => 'required',
+        'SUBTOTAL'      => 'required|numeric|min:0',
+        'DISKON'        => 'nullable|numeric|min:0',
+        'SISA_TAGIHAN'  => 'required|numeric|min:0',
+        'PESAN'         => 'nullable',
+    ]);
 
-        $subtotal = (float) $request->SUBTOTAL;
-        $diskon = (float) ($request->DISKON ?? 0);
-        $total = max(0, $subtotal - $diskon);
-        $terbilang = $this->terbilang($total) . ' Rupiah';
+    // =============================================
+    // 2. GENERATE ID OTOMATIS
+    // =============================================
+    $lastId = Penjualan::max('ID_PENJUALAN');
+    if ($lastId) {
+        $angka = (int) substr($lastId, 4) + 1;
+    } else {
+        $angka = 4001;
+    }
+    $idPenjualan = 'INV-' . sprintf("%04d", $angka);
 
-        $data = $request->only([
-            'ID_PENJUALAN', 'TANGGAL', 'JATUH_TEMPO', 'ID_PETUGAS',
-            'ID_PELANGGAN', 'SUBTOTAL', 'DISKON', 'SISA_TAGIHAN', 'PESAN'
-        ]);
-        $data['TOTAL'] = $total;
-        $data['TERBILANG'] = $terbilang;
+    // =============================================
+    // 3. HITUNG TOTAL & TERBILANG
+    // =============================================
+    $subtotal = (float) $request->SUBTOTAL;
+    $diskon   = (float) ($request->DISKON ?? 0);
+    $total    = max(0, $subtotal - $diskon);
+    $terbilang = $this->terbilang($total) . ' Rupiah';
 
-        Penjualan::create($data);
+    // =============================================
+    // 4. SIAPKAN DATA
+    // =============================================
+    $data = [
+        'ID_PENJUALAN'  => $idPenjualan,
+        'TANGGAL'       => $request->TANGGAL,
+        'JATUH_TEMPO'   => $request->JATUH_TEMPO,
+        'ID_PETUGAS'    => $request->ID_PETUGAS,
+        'ID_PELANGGAN'  => $request->ID_PELANGGAN,
+        'SUBTOTAL'      => $subtotal,
+        'DISKON'        => $diskon,
+        'SISA_TAGIHAN'  => $request->SISA_TAGIHAN,
+        'PESAN'         => $request->PESAN,
+        'TOTAL'         => $total,
+        'TERBILANG'     => $terbilang,
+    ];
 
-        return redirect()->route('penjualan.index', ['limit' => $request->get('limit', 10)])
-                         ->with('success', 'Berhasil! Data penjualan baru telah ditambahkan.');
+   
+       $penjualan = Penjualan::create($data);
+return redirect()->route('detailpenjualan.index', ['id' => $penjualan->ID_PENJUALAN])
+                 ->with('success', 'Berhasil! Data penjualan baru telah ditambahkan. Silakan tambahkan item barang.');
     }
 
     // Form edit
@@ -168,4 +194,15 @@ class PenjualanController extends Controller
         return redirect()->route('penjualan.index', ['limit' => $request->get('limit', 10)])
                          ->with('success', 'Data penjualan berhasil dihapus.');
     }
+
+    public function cetakInvoice($id)
+{
+    $penjualan = Penjualan::with(['pelanggan', 'petugas'])->findOrFail($id);
+    $detail = DetailPenjualan::with('barang')
+                ->where('ID_PENJUALAN', $id)
+                ->orderBy('ID_BARANG', 'asc')
+                ->get();
+
+    return view('penjualan.detail.cetak', compact('penjualan', 'detail'));
+}
 }

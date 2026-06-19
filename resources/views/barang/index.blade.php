@@ -38,7 +38,14 @@
         padding: 10px;
         border-radius: 12px;
     }
-    .header-actions-right { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+    .header-actions-right {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
     .btn-primary {
         background: #b8860b;
         color: white;
@@ -53,7 +60,12 @@
         gap: 10px;
         transition: all 0.3s ease;
     }
-    .btn-primary:hover { background: #9a7009; transform: translateY(-2px); }
+    .btn-primary:hover {
+        background: #9a7009;
+        transform: translateY(-2px);
+    }
+
+    /* LIMIT SELECTOR CSS */
     .limit-selector {
         display: flex;
         align-items: center;
@@ -63,7 +75,11 @@
         border-radius: 40px;
         border: 1px solid #e2e8f0;
     }
-    .limit-selector label { font-size: 13px; font-weight: 600; color: #475569; }
+    .limit-selector label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #475569;
+    }
     .limit-selector a {
         color: #b8860b;
         text-decoration: none;
@@ -73,8 +89,15 @@
         font-size: 13px;
         transition: all 0.2s ease;
     }
-    .limit-selector a:hover { background: #b8860b; color: white; }
-    .limit-selector .active-limit { background: #b8860b; color: white; }
+    .limit-selector a:hover {
+        background: #b8860b;
+        color: white;
+    }
+    .limit-selector .active-limit {
+        background: #b8860b;
+        color: white;
+    }
+
     .table-responsive {
         overflow-x: auto;
         border-radius: 12px;
@@ -105,7 +128,10 @@
         border-bottom: 1px solid #f1f5f9;
         vertical-align: middle;
     }
-    .data-table tbody tr:hover { background-color: #f8fafc; }
+    .data-table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
     .id-badge {
         background: #b8860b;
         color: #f1f5f9;
@@ -130,8 +156,17 @@
         letter-spacing: 0.5px;
         box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
     }
-    .barang-name { font-weight: 600; color: #0f172a; }
-    .action-buttons { display: flex; gap: 6px; flex-wrap: nowrap; align-items: center; }
+    .barang-name {
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 6px;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
     .btn-action {
         padding: 6px 12px;
         border-radius: 8px;
@@ -147,12 +182,37 @@
         cursor: pointer;
         font-family: inherit;
     }
-    .btn-bom { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
-    .btn-bom:hover { background: #10b981; color: white; border-color: #10b981; }
-    .btn-edit { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
-    .btn-edit:hover { background: #3b82f6; color: white; border-color: #3b82f6; }
-    .btn-delete { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
-    .btn-delete:hover { background: #ef4444; color: white; border-color: #ef4444; }
+    .btn-bom {
+        background: #ecfdf5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
+    }
+    .btn-bom:hover {
+        background: #10b981;
+        color: white;
+        border-color: #10b981;
+    }
+    .btn-edit {
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+    }
+    .btn-edit:hover {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
+    .btn-delete {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+    }
+    .btn-delete:hover {
+        background: #ef4444;
+        color: white;
+        border-color: #ef4444;
+    }
+
     .alert-success {
         background: #d1fae5;
         color: #065f46;
@@ -167,52 +227,62 @@
         border-radius: 12px;
         margin-bottom: 20px;
     }
+
+    /* PAGINATION CSS */
     .pagination {
-        margin-top: 0;
-        padding-top: 16px;
-        padding-bottom: 4px;
+        margin-top: 24px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 12px;
-        border-top: 1px solid #f1f5f9;
+        gap: 16px;
     }
-    .pagination-info {
-        font-size: 13px;
-        color: #64748b;
-        background: transparent;
-        padding: 0;
-        border-radius: 0;
+    .pagination-links {
         display: flex;
-        align-items: center;
         gap: 6px;
+        flex-wrap: wrap;
     }
-    .pagination-links { display: flex; gap: 8px; align-items: center; }
     .pagination-links a, .pagination-links span {
         padding: 8px 14px;
-        border-radius: 8px;
-        border: 1px solid #e2e8f0;
-        background: #ffffff;
-        color: #475569;
+        border-radius: 10px;
         text-decoration: none;
         font-size: 14px;
         font-weight: 500;
-        min-width: 36px;
-        text-align: center;
+        transition: all 0.2s ease;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #475569;
     }
-    .pagination-links a:hover { background: #f1f5f9; }
+    .pagination-links a:hover {
+        background: #b8860b;
+        color: white;
+        border-color: #b8860b;
+    }
     .pagination-links .active-page {
         background: #b8860b;
         color: white;
         border-color: #b8860b;
-        font-weight: 700;
     }
-    .pagination-links .disabled { color: #cbd5e1; background: #f8fafc; cursor: not-allowed; }
-    .empty-state { text-align: center; padding: 60px 20px; }
-    .empty-state i { font-size: 48px; color: #cbd5e1; margin-bottom: 16px; }
+    .pagination-info {
+        font-size: 13px;
+        color: #64748b;
+        background: #f8fafc;
+        padding: 6px 16px;
+        border-radius: 30px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+    .empty-state i {
+        font-size: 48px;
+        color: #cbd5e1;
+        margin-bottom: 16px;
+    }
     .empty-state h4 { color: #475569; margin-bottom: 8px; }
     .empty-state p { color: #94a3b8; font-size: 14px; }
+
     @media (max-width: 768px) {
         .table-container { padding: 16px; }
         .action-header { flex-direction: column; align-items: flex-start; }
@@ -226,10 +296,10 @@
         <div class="header-actions-right">
             <div class="limit-selector">
                 <label>Tampilkan:</label>
-                <a href="{{ route('barang.index', ['limit' => 5]) }}" {{ request('limit') == 5 ? 'class=active-limit' : '' }}>5</a>
-                <a href="{{ route('barang.index', ['limit' => 10]) }}" {{ request('limit') == 10 ? 'class=active-limit' : '' }}>10</a>
-                <a href="{{ route('barang.index', ['limit' => 15]) }}" {{ request('limit') == 15 ? 'class=active-limit' : '' }}>15</a>
-                <a href="{{ route('barang.index', ['limit' => 20]) }}" {{ request('limit') == 20 ? 'class=active-limit' : '' }}>20</a>
+                <a href="{{ route('barang.index', ['limit' => 5]) }}" {{ request('limit', 10) == 5 ? 'class=active-limit' : '' }}>5</a>
+                <a href="{{ route('barang.index', ['limit' => 10]) }}" {{ request('limit', 10) == 10 ? 'class=active-limit' : '' }}>10</a>
+                <a href="{{ route('barang.index', ['limit' => 15]) }}" {{ request('limit', 10) == 15 ? 'class=active-limit' : '' }}>15</a>
+                <a href="{{ route('barang.index', ['limit' => 20]) }}" {{ request('limit', 10) == 20 ? 'class=active-limit' : '' }}>20</a>
             </div>
             <a href="{{ route('barang.create') }}" class="btn-primary">
                 <i class="fas fa-plus"></i> Tambah Barang
@@ -255,7 +325,10 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($barang as $b)
+               @php
+    $sortedBarang = $barang->getCollection()->sortByDesc('ID_BARANG');
+@endphp
+@forelse($sortedBarang as $b)
                 <tr>
                     <td style="width: 15%;"><span class="id-badge">{{ $b->ID_BARANG }}</span></td>
                     <td class="barang-name" style="width: 40%;">{{ $b->NAMA_BARANG }}</td>
@@ -297,10 +370,11 @@
     @if($barang->total() > 0)
     <div class="pagination">
         <div class="pagination-info">
-            <i class="fas fa-database" style="font-size: 12px; color: #94a3b8;"></i>
-            Menampilkan data {{ $barang->firstItem() }} - {{ $barang->lastItem() }} dari {{ $barang->total() }} barang
+            <i class="fas fa-database"></i> Menampilkan data {{ $barang->firstItem() }} - {{ $barang->lastItem() }} dari {{ $barang->total() }} barang
         </div>
-        {{ $barang->appends(['limit' => request('limit', 10)])->links('vendor.pagination.custom') }}
+        <div class="pagination-links">
+            {{ $barang->appends(['limit' => request('limit', 10)])->links('vendor.pagination.custom') }}
+        </div>
     </div>
     @endif
 </div>

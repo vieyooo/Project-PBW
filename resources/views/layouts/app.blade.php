@@ -94,37 +94,45 @@
         <div class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <a href="{{ route('dashboard') }}"><i class="fas fa-chart-pie"></i><span class="sidebar-text">Dashboard</span></a>
         </div>
-        <!-- Petugas (sementara belum ada route, bisa diarahkan ke # dulu) -->
+
+        <!-- Petugas -->
         <div class="nav-item {{ request()->routeIs('petugas.*') ? 'active' : '' }}">
-    <a href="{{ route('petugas.index') }}"><i class="fas fa-user-tie"></i><span class="sidebar-text">Petugas</span></a>
-</div>
-        <!-- Pelanggan - PASTIKAN LINK INI BENAR -->
+            <a href="{{ route('petugas.index') }}"><i class="fas fa-user-tie"></i><span class="sidebar-text">Petugas</span></a>
+        </div>
+
+        <!-- Pelanggan -->
         <div class="nav-item {{ request()->routeIs('pelanggans.*') ? 'active' : '' }}">
             <a href="{{ route('pelanggans.index') }}"><i class="fas fa-user-friends"></i><span class="sidebar-text">Pelanggan</span></a>
         </div>
+
         <!-- Supplier -->
         <div class="nav-item {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
             <a href="{{ route('suppliers.index') }}"><i class="fas fa-truck"></i><span class="sidebar-text">Supplier</span></a>
         </div>
+
         <!-- Bahan Baku -->
         <div class="nav-item {{ request()->routeIs('bahan-bakus.*') ? 'active' : '' }}">
             <a href="{{ route('bahan-bakus.index') }}"><i class="fas fa-boxes"></i><span class="sidebar-text">Bahan Baku</span></a>
         </div>
+
         <!-- Barang -->
         <div class="nav-item {{ request()->routeIs('barang.*') ? 'active' : '' }}">
             <a href="{{ route('barang.index') }}"><i class="fas fa-box"></i><span class="sidebar-text">Barang</span></a>
         </div>
-        <!-- Pembelian (sementara belum ada route, bisa diarahkan ke # dulu) -->
+
+        <!-- Pembelian -->
         <div class="nav-item {{ request()->routeIs('pembelian.*') ? 'active' : '' }}">
-    <a href="{{ route('pembelian.index') }}">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="sidebar-text">Pembelian</span>
-    </a>
-</div>
-        <!-- Penjualan (sementara) -->
-        <div class="nav-item">
-            <a href="#"><i class="fas fa-file-invoice-dollar"></i><span class="sidebar-text">Penjualan</span></a>
+            <a href="{{ route('pembelian.index') }}"><i class="fas fa-shopping-cart"></i><span class="sidebar-text">Pembelian</span></a>
         </div>
+
+        <!-- ===== PERBAIKAN: MENU PENJUALAN ===== -->
+        <div class="nav-item {{ request()->routeIs('penjualan.*') ? 'active' : '' }}">
+            <a href="{{ route('penjualan.index') }}">
+                <i class="fas fa-file-invoice-dollar"></i><span class="sidebar-text">Penjualan</span>
+            </a>
+        </div>
+        <!-- ===================================== -->
+
         <div style="margin-top:40px; border-top:1px solid #e2e8f0; padding-top:12px;"></div>
         <div class="nav-item">
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -140,7 +148,7 @@
     <div class="topbar">
         <div style="display: flex; align-items: center;">
             <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
-            <span class="page-title">@yield('page-title', 'Data Pelanggan')</span>
+            <span class="page-title">@yield('page-title', 'Dashboard')</span>  {{-- default diubah ke 'Dashboard' --}}
         </div>
         <div class="user-dropdown">
             <div class="user" id="userBtn">

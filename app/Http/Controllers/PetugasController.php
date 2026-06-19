@@ -83,45 +83,46 @@ class PetugasController extends Controller
         return view('petugas.edit', compact('petugas', 'jabatanOptions'));
     }
 
-    // Update data
     public function update(Request $request, $id)
-    {
-        $petugas = Petugas::findOrFail($id);
+{
+    $petugas = Petugas::findOrFail($id);
 
-        $request->validate([
-            'NAMA_PETUGAS' => 'required|string|max:100',
-            'JABATAN'      => 'required|string|max:100',
-            'ttd'          => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
+    $request->validate([
+        'NAMA_PETUGAS' => 'required|string|max:100',
+        'JABATAN'      => 'required|string|max:100',
+        'ttd'          => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
 
-        $data = $request->only(['NAMA_PETUGAS', 'JABATAN']);
+    $data = $request->only(['NAMA_PETUGAS', 'JABATAN']);
 
-        // Hapus tanda tangan jika checkbox dicentang
-        if ($request->has('hapus_ttd') && $request->hapus_ttd == '1') {
-            if ($petugas->FILE_TTD && file_exists(public_path('img/ttd/' . $petugas->FILE_TTD))) {
-                unlink(public_path('img/ttd/' . $petugas->FILE_TTD));
-            }
-            $data['FILE_TTD'] = null;
+    // Hapus tanda tangan jika checkbox dicentang
+    if ($request->has('hapus_ttd') && $request->hapus_ttd == '1') {
+        if ($petugas->FILE_TTD && file_exists(public_path('img/ttd/' . $petugas->FILE_TTD))) {
+            unlink(public_path('img/ttd/' . $petugas->FILE_TTD));
         }
-
-        // Upload file baru jika ada
-        if ($request->hasFile('ttd')) {
-            // Hapus file lama jika ada
-            if ($petugas->FILE_TTD && file_exists(public_path('img/ttd/' . $petugas->FILE_TTD))) {
-                unlink(public_path('img/ttd/' . $petugas->FILE_TTD));
-            }
-            $file = $request->file('ttd');
-            $filename = $petugas->ID_PETUGAS . '_' . date('YmdHis') . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('img/ttd'), $filename);
-            $data['FILE_TTD'] = $filename;
-        }
-
-        $petugas->update($data);
-
-        return redirect()->route('petugas.index', ['limit' => $request->get('limit', 10)])
-                         ->with('success', 'Data petugas berhasil diupdate.');
+        $data['FILE_TTD'] = null;
     }
 
+    // Upload file baru jika ada
+    if ($request->hasFile('ttd')) {
+        // Hapus file lama jika ada
+        if ($petugas->FILE_TTD && file_exists(public_path('img/ttd/' . $petugas->FILE_TTD))) {
+            unlink(public_path('img/ttd/' . $petugas->FILE_TTD));
+        }
+        $file = $request->file('ttd');
+        $filename = $petugas->ID_PETUGAS . '_' . date('YmdHis') . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('img/ttd'), $filename);
+        $data['FILE_TTD'] = $filename;
+    }
+
+    // Jika tidak ada file dan tidak menghapus, biarkan FILE_TTD tetap seperti sebelumnya
+    // Jangan set $data['FILE_TTD'] = null jika tidak ada perubahan
+
+    $petugas->update($data);
+
+    return redirect()->route('petugas.index', ['limit' => $request->get('limit', 10)])
+                     ->with('success', 'Data petugas berhasil diupdate.');
+}
     // Hapus data (dengan cek relasi ke penjualan)
     public function destroy(Request $request, $id)
     {

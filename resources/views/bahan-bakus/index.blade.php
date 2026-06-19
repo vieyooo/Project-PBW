@@ -278,7 +278,10 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($bahanBaku as $b)
+               @php
+    $sortedBahan = $bahanBaku->getCollection()->sortByDesc('ID_BAHAN_BAKU');
+@endphp
+@forelse($sortedBahan as $b)
                 <tr>
                     <td><span class="id-badge">{{ $b->ID_BAHAN_BAKU }}</span></td>
                     <td class="supplier-name">{{ $b->JENIS }}</td>
