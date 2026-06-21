@@ -49,8 +49,16 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        $request->session()->flush();
+
+        // invalidate() menghapus seluruh data session SEKALIGUS mengganti
+        // session ID dengan cara yang aman & konsisten (cara resmi Laravel
+        // untuk logout). Jangan pakai flush() di sini -- flush() hanya
+        // mengosongkan data session tanpa mengganti session ID, sehingga
+        // bisa menyebabkan CSRF token lama vs baru tabrakan dan memicu
+        // error 419 Page Expired saat user langsung login lagi setelah logout.
+        $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
 }

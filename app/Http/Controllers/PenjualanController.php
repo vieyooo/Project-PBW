@@ -10,6 +10,7 @@ use App\Models\Barang;
 use App\Models\BahanBaku;
 use App\Models\Bom;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PenjualanController extends Controller
 {
@@ -189,10 +190,21 @@ return redirect()->route('detailpenjualan.index', ['id' => $penjualan->ID_PENJUA
     public function destroy(Request $request, $id)
     {
         $penjualan = Penjualan::findOrFail($id);
-        $penjualan->delete();
+
+        // Penjualan punya banyak DetailPenjualan (foreign key ID_PENJUALAN).
+        // MySQL akan menolak penghapusan penjualan selama masih ada baris
+        // detail_penjualan yang mengacu ke ID_PENJUALAN ini (error 1451 /
+        // Integrity constraint violation). Jadi detail-nya harus dihapus
+        // dulu (cascade manual di sisi kode) sebelum menghapus induknya.
+        // Dibungkus DB::transaction supaya kalau salah satu proses gagal,
+        // semua dibatalkan (tidak ada data yang setengah terhapus).
+        DB::transaction(function () use ($penjualan) {
+            $penjualan->detailPenjualans()->delete();
+            $penjualan->delete();
+        });
 
         return redirect()->route('penjualan.index', ['limit' => $request->get('limit', 10)])
-                         ->with('success', 'Data penjualan berhasil dihapus.');
+                         ->with('success', 'Data penjualan beserta seluruh detail itemnya berhasil dihapus.');
     }
 
     public function cetakInvoice($id)

@@ -3,7 +3,7 @@
 
 @section('content')
 <style>
-    .form-container {
+.form-container {
         max-width: 600px; margin: 0 auto; background: #fff; border-radius: 20px;
         border: 1px solid #e2e8f0; padding: 24px 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
     }
@@ -23,13 +23,15 @@
     }
     .form-control {
         width: 100%; padding: 10px 14px; font-size: 13px;
-        border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;
+        border: 1px solid #060606; border-radius: 8px; background: #f8fafc;
+        color: #000000;
     }
     .form-control:focus {
         border-color: #b8860b; outline: none; box-shadow: 0 0 0 3px rgba(184,134,11,0.1);
     }
     .form-control[readonly] {
         background: #e2e8f0; cursor: not-allowed;
+        color: #1e293b;
     }
     .btn {
         padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600;

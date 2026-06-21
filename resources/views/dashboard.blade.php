@@ -152,25 +152,25 @@
         <div class="nav-item {{ request()->routeIs('pelanggans.*') || Str::contains($menu, 'pelanggan') ? 'active' : '' }}">
             <a href="{{ route('pelanggans.index') }}"><i class="fas fa-user-friends"></i><span class="sidebar-text">Pelanggan</span></a>
         </div>
-        <div class="nav-item {{ Str::contains($menu, 'supplier') ? 'active' : '' }}">
-            <a href="?menu=supplier-lihat"><i class="fas fa-truck"></i><span class="sidebar-text">Supplier</span></a>
+        <div class="nav-item {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
+            <a href="{{ route('suppliers.index') }}"><i class="fas fa-truck"></i><span class="sidebar-text">Supplier</span></a>
         </div>
-        <div class="nav-item {{ Str::contains($menu, 'penjualan') ? 'active' : '' }}">
-            <a href="?menu=penjualan"><i class="fas fa-file-invoice-dollar"></i><span class="sidebar-text">Penjualan</span></a>
+        <div class="nav-item {{ request()->routeIs('penjualan.*') ? 'active' : '' }}">
+            <a href="{{ route('penjualan.index') }}"><i class="fas fa-file-invoice-dollar"></i><span class="sidebar-text">Penjualan</span></a>
         </div>
     @endif
 
     @if(Str::contains(strtolower(Auth::user()->JABATAN), ['production', 'owner']))
-        <div class="nav-item {{ Str::contains($menu, 'bahanbaku') ? 'active' : '' }}">
-            <a href="?menu=bahanbaku-lihat"><i class="fas fa-boxes"></i><span class="sidebar-text">Bahan Baku</span></a>
+        <div class="nav-item {{ request()->routeIs('bahan-bakus.*') ? 'active' : '' }}">
+            <a href="{{ route('bahan-bakus.index') }}"><i class="fas fa-boxes"></i><span class="sidebar-text">Bahan Baku</span></a>
         </div>
-        <div class="nav-item {{ Str::contains($menu, 'barang') ? 'active' : '' }}">
-            <a href="?menu=barang-lihat"><i class="fas fa-box"></i><span class="sidebar-text"> Barang / BOM</span></a>
+        <div class="nav-item {{ request()->routeIs('barang.*') ? 'active' : '' }}">
+            <a href="{{ route('barang.index') }}"><i class="fas fa-box"></i><span class="sidebar-text"> Barang / BOM</span></a>
         </div>
     @endif
 
-    <div class="nav-item {{ Str::contains($menu, 'pembelian') ? 'active' : '' }}">
-        <a href="?menu=pembelian"><i class="fas fa-shopping-cart"></i><span class="sidebar-text">Pembelian</span></a>
+    <div class="nav-item {{ request()->routeIs('pembelian.*') ? 'active' : '' }}">
+        <a href="{{ route('pembelian.index') }}"><i class="fas fa-shopping-cart"></i><span class="sidebar-text">Pembelian</span></a>
     </div>
 </div>
     </div>
@@ -388,6 +388,18 @@
                 </script>
             @break
 
+            {{--
+                CATATAN: Case di bawah ini (petugas, pelanggan, supplier, bahanbaku,
+                barang, pembelian, penjualan, beserta semua sub-menunya) SUDAH TIDAK
+                DIPAKAI oleh sidebar lagi, karena sidebar sekarang pakai route resource
+                asli (mis. route('bahan-bakus.index')) yang sudah punya controller &
+                view sendiri. Ini ditinggalkan dulu (bukan dihapus) untuk jaga-jaga
+                kalau ada bagian lain di project yang masih manggil ?menu=..., dan agar
+                aman kalau memang masih dipakai di tempat lain yang belum dicek.
+                Sebagian besar view yang di-@include di sini (mis. bahanbaku.bahanbaku-lihat,
+                barang.barang-lihat, supplier.supplier-lihat, penjualan.penjualan-lihat)
+                TIDAK ADA filenya di resources/views — itu sumber error 500 sebelumnya.
+            --}}
             @case('petugas')
                 <script>window.location.href = "{{ route('petugas.index') }}";</script>
             @break
