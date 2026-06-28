@@ -4,25 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Pembelian;
 use App\Models\Supplier;
-use App\Models\BahanBaku; // Memastikan model BahanBaku ter-import secara benar
+use App\Models\BahanBaku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class PembelianController extends Controller
 {
-    // LIST semua pembelian
     public function index(Request $request)
     {
         $limit = $request->input('limit', 10);
-
         $pembelian = Pembelian::with('supplier')
             ->orderByDesc('TANGGAL')
             ->paginate($limit);
-
         return view('pembelian.index', compact('pembelian', 'limit'));
     }
 
-    // FORM tambah pembelian utama
     public function create()
     {
         $suppliers = Supplier::all();
@@ -32,7 +29,6 @@ class PembelianController extends Controller
         return view('pembelian.create', compact('suppliers', 'newNumber'));
     }
 
-    // SIMPAN tambah pembelian utama
     public function store(Request $request)
     {
         $request->validate([
@@ -41,21 +37,17 @@ class PembelianController extends Controller
             'ID_SUPPLIER' => 'required',
             'JUMLAH_HARGA'=> 'required|numeric|min:0',
             'ONGKOS_KIRIM'=> 'nullable|numeric|min:0',
-            'DISKON'      => 'nullable|numeric|min:0',
+            // DISKON dihapus dari validasi
             'SCAN_NOTA'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Hapus titik/koma dari format rupiah
         $jumlah = (float) str_replace(['.', ','], ['', '.'], $request->JUMLAH_HARGA);
         $ongkir = (float) str_replace(['.', ','], ['', '.'], $request->ONGKOS_KIRIM ?? 0);
-        $diskon = (float) str_replace(['.', ','], ['', '.'], $request->DISKON ?? 0);
 
-        // Hitung NILAI_DPP dan PPN (11%)
         $nilaiDpp = $jumlah * (100 / 111);
         $ppn = $jumlah - $nilaiDpp;
-        $total = ($nilaiDpp + $ppn + $ongkir) - $diskon;
+        $total = $nilaiDpp + $ppn + $ongkir; // tanpa diskon
 
-        // Upload scan nota
         $scanPath = null;
         if ($request->hasFile('SCAN_NOTA')) {
             $file = $request->file('SCAN_NOTA');
@@ -73,7 +65,7 @@ class PembelianController extends Controller
             'NILAI_DPP'    => $nilaiDpp,
             'PPN'          => $ppn,
             'ONGKOS_KIRIM' => $ongkir,
-            'DISKON'       => $diskon,
+            // 'DISKON' => $diskon, // tidak ada
             'TOTAL_INVOICE'=> $total,
             'SCAN_NOTA'    => $scanPath,
         ]);
@@ -82,34 +74,23 @@ class PembelianController extends Controller
                          ->with('success', 'Pembelian berhasil ditambahkan!');
     }
 
-    // DETAIL pembelian + list bahan baku
     public function show($id)
     {
         $pembelian = Pembelian::with(['supplier', 'details.bahanBaku'])->findOrFail($id);
-        
-        // Mengambil details secara eksplisit untuk dikirim ke view show.blade.php
-        $details = $pembelian->details; 
-
+        $details = $pembelian->details;
         return view('pembelian.show', compact('pembelian', 'details'));
     }
 
-    // FORM tambah detail bahan baku per invoice
     public function createDetail($no_invoice)
     {
-        // 1. Memastikan data invoice ini memang ada di database
         $pembelian = Pembelian::where('NO_INVOICE', $no_invoice)->firstOrFail();
-        
-        // 2. Ambil semua data bahan baku untuk isi dropdown di form
-        $bahanBakus = BahanBaku::orderBy('JENIS', 'asc')->get(); 
-
-        // 3. Kirimkan kedua variabel tersebut ke view
+        $bahanBakus = BahanBaku::orderBy('JENIS', 'asc')->get();
         return view('pembelian.detail-tambah', [
             'noInvoice'  => $pembelian->NO_INVOICE,
             'bahanBakus' => $bahanBakus
         ]);
     }
 
-    // FORM edit pembelian utama
     public function edit($id)
     {
         $pembelian = Pembelian::findOrFail($id);
@@ -117,33 +98,28 @@ class PembelianController extends Controller
         return view('pembelian.edit', compact('pembelian', 'suppliers'));
     }
 
-    // SIMPAN edit pembelian utama
     public function update(Request $request, $id)
     {
         $pembelian = Pembelian::findOrFail($id);
+
         $request->validate([
             'TANGGAL'     => 'required|date',
             'ID_SUPPLIER' => 'required',
             'JUMLAH_HARGA'=> 'required|numeric|min:0',
             'ONGKOS_KIRIM'=> 'nullable|numeric|min:0',
-            'DISKON'      => 'nullable|numeric|min:0',
+            // DISKON dihapus
             'SCAN_NOTA'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Hapus titik/koma dari format rupiah
         $jumlah = (float) str_replace(['.', ','], ['', '.'], $request->JUMLAH_HARGA);
         $ongkir = (float) str_replace(['.', ','], ['', '.'], $request->ONGKOS_KIRIM ?? 0);
-        $diskon = (float) str_replace(['.', ','], ['', '.'], $request->DISKON ?? 0);
 
-        // Hitung NILAI_DPP dan PPN (11%)
         $nilaiDpp = $jumlah * (100 / 111);
         $ppn = $jumlah - $nilaiDpp;
-        $total = ($nilaiDpp + $ppn + $ongkir) - $diskon;
+        $total = $nilaiDpp + $ppn + $ongkir; // tanpa diskon
 
-        // Upload scan nota
         $scanPath = $pembelian->SCAN_NOTA;
         if ($request->hasFile('SCAN_NOTA')) {
-            // Hapus file lama
             if ($scanPath && file_exists(public_path($scanPath))) {
                 unlink(public_path($scanPath));
             }
@@ -154,7 +130,6 @@ class PembelianController extends Controller
             $scanPath = $path . $filename;
         }
 
-        // Hapus scan jika checkbox dicentang
         if ($request->has('hapus_scan') && $request->hapus_scan == '1') {
             if ($scanPath && file_exists(public_path($scanPath))) {
                 unlink(public_path($scanPath));
@@ -169,7 +144,7 @@ class PembelianController extends Controller
             'NILAI_DPP'    => $nilaiDpp,
             'PPN'          => $ppn,
             'ONGKOS_KIRIM' => $ongkir,
-            'DISKON'       => $diskon,
+            // 'DISKON' => $diskon, // tidak ada
             'TOTAL_INVOICE'=> $total,
             'SCAN_NOTA'    => $scanPath,
         ]);
@@ -177,21 +152,29 @@ class PembelianController extends Controller
         return redirect()->route('pembelian.index')->with('success', 'Pembelian berhasil diupdate!');
     }
 
-    // HAPUS pembelian
-    public function destroy($id)
-    {
-        $pembelian = Pembelian::findOrFail($id);
+  public function destroy($id)
+{
+    try {
+        DB::beginTransaction();
 
-        if ($pembelian->details()->count() > 0) {
-            return redirect()->route('pembelian.index')
-                ->with('error', "Gagal! Invoice $id masih punya detail. Hapus detail dulu.");
-        }
+        $pembelian = Pembelian::with('details')->findOrFail($id);
+
+        $pembelian->details()->delete();
 
         if ($pembelian->SCAN_NOTA && file_exists(public_path($pembelian->SCAN_NOTA))) {
             unlink(public_path($pembelian->SCAN_NOTA));
         }
 
         $pembelian->delete();
-        return redirect()->route('pembelian.index')->with('success', 'Pembelian berhasil dihapus!');
+
+        DB::commit();
+
+        return redirect()->route('pembelian.index')
+                         ->with('success', 'Pembelian beserta seluruh detailnya berhasil dihapus!');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->route('pembelian.index')
+                         ->with('error', 'Gagal menghapus: ' . $e->getMessage());
     }
+}
 }

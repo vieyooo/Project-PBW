@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BahanBaku;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BahanBakuController extends Controller
 {
@@ -39,11 +40,11 @@ class BahanBakuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode'         => 'required|string|max:50',
-            'jenis'        => 'required|string|max:255',
-            'harga_satuan' => 'required|string',
-            'satuan'       => 'required|string|max:20',
-            'stok'         => 'required|integer|min:0',
+            'kode'       => 'required|string|max:50',
+            'jenis'      => 'required|string|max:255',
+            'harga_beli' => 'required|string', // diubah dari harga_satuan
+            'satuan'     => 'required|string|max:20',
+            'stok'       => 'required|integer|min:0',
         ]);
 
         $max_id = BahanBaku::max('ID_BAHAN_BAKU');
@@ -57,13 +58,13 @@ class BahanBakuController extends Controller
 
         $id_otomatis = "BB-" . $urutan;
 
-        $harga = str_replace(['.', ','], '', $request->harga_satuan);
+        $harga = str_replace(['.', ','], '', $request->harga_beli);
 
         BahanBaku::create([
             'ID_BAHAN_BAKU' => $id_otomatis,
             'JENIS'         => $request->jenis,
             'KODE'          => $request->kode,
-            'HARGA_SATUAN'  => $harga,
+            'HARGA_BELI'    => $harga, // diubah
             'SATUAN'        => $request->satuan,
             'STOK'          => $request->stok,
         ]);
@@ -79,21 +80,21 @@ class BahanBakuController extends Controller
     public function update(Request $request, BahanBaku $bahan_baku)
     {
         $request->validate([
-            'kode'         => 'required|string|max:50',
-            'jenis'        => 'required|string|max:255',
-            'harga_satuan' => 'required|string',
-            'satuan'       => 'required|string|max:20',
-            'stok'         => 'required|integer|min:0',
+            'kode'       => 'required|string|max:50',
+            'jenis'      => 'required|string|max:255',
+            'harga_beli' => 'required|string', // diubah
+            'satuan'     => 'required|string|max:20',
+            'stok'       => 'required|integer|min:0',
         ]);
 
-        $harga = str_replace(['.', ','], '', $request->harga_satuan);
+        $harga = str_replace(['.', ','], '', $request->harga_beli);
 
         $bahan_baku->update([
-            'JENIS'        => $request->jenis,
-            'KODE'         => $request->kode,
-            'HARGA_SATUAN' => $harga,
-            'SATUAN'       => $request->satuan,
-            'STOK'         => $request->stok,
+            'JENIS'       => $request->jenis,
+            'KODE'        => $request->kode,
+            'HARGA_BELI'  => $harga, // diubah
+            'SATUAN'      => $request->satuan,
+            'STOK'        => $request->stok,
         ]);
 
         return redirect()->route('bahan-bakus.index')->with('success', 'Data bahan baku telah diperbarui.');
@@ -101,7 +102,7 @@ class BahanBakuController extends Controller
 
     public function destroy(BahanBaku $bahan_baku)
     {
-        $totalBom = \DB::table('bom')
+        $totalBom = DB::table('bom')
             ->where('ID_BAHAN_BAKU', $bahan_baku->ID_BAHAN_BAKU)
             ->count();
 

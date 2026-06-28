@@ -263,11 +263,6 @@
                 <input type="number" name="ONGKOS_KIRIM" id="ongkos_kirim" class="form-control"
        value="{{ old('ONGKOS_KIRIM', '0') }}" min="0" step="1" oninput="hitungOtomatis()">
             </div>
-            <div class="form-group">
-                <label class="form-label">Diskon (Rp) <span class="optional">(opsional)</span></label>
-                <input type="number" name="DISKON" id="diskon" class="form-control"
-       value="{{ old('DISKON', '0') }}" min="0" step="1" oninput="hitungOtomatis()">
-            </div>
         </div>
 
         <div class="computed-box" id="kalkulasiBox" style="display:none;">
@@ -275,7 +270,6 @@
             <p><span>Nilai DPP (100/111)</span> <span id="show_dpp">Rp 0</span></p>
             <p><span>PPN 11%</span> <span id="show_ppn">Rp 0</span></p>
             <p><span>Ongkos Kirim</span> <span id="show_ongkir">Rp 0</span></p>
-            <p><span>Diskon</span> <span id="show_diskon">- Rp 0</span></p>
             <p><span>Total Invoice</span> <span id="show_total">Rp 0</span></p>
         </div>
 
@@ -313,18 +307,16 @@ function formatRupiah(angka) {
 function hitungOtomatis() {
     const jumlah = parseFloat(document.getElementById('jumlah_harga').value) || 0;
     const ongkir = parseFloat(document.getElementById('ongkos_kirim').value) || 0;
-    const diskon = parseFloat(document.getElementById('diskon').value) || 0;
 
     if (jumlah > 0) {
         const dpp = jumlah * (100 / 111);
         const ppn = jumlah - dpp;
-        const total = (dpp + ppn + ongkir) - diskon;
+        const total = dpp + ppn + ongkir;
 
         document.getElementById('show_jumlah').textContent = formatRupiah(jumlah);
         document.getElementById('show_dpp').textContent = formatRupiah(dpp);
         document.getElementById('show_ppn').textContent = formatRupiah(ppn);
         document.getElementById('show_ongkir').textContent = formatRupiah(ongkir);
-        document.getElementById('show_diskon').textContent = '- ' + formatRupiah(diskon);
         document.getElementById('show_total').textContent = formatRupiah(total);
         document.getElementById('kalkulasiBox').style.display = 'block';
     } else {

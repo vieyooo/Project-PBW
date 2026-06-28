@@ -12,7 +12,6 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // Gunakan Auth::check() — konsisten dengan middleware 'auth' di routes
         if (!Auth::check()) {
             return redirect()->route('login');
         }
@@ -30,8 +29,17 @@ class DashboardController extends Controller
             $data['total_pelanggan'] = DB::table('pelanggan')->count();
             $data['total_barang']    = DB::table('barang')->count();
             $data['total_penjualan'] = DB::table('penjualan')->count();
-            $data['total_pendapatan']= DB::table('penjualan')->sum('TOTAL') ?? 0;
 
+            // =====================================================
+            // TOTAL PENDAPATAN HANYA DARI TRANSAKSI LUNAS
+            // =====================================================
+            $data['total_pendapatan'] = DB::table('penjualan')
+                                          ->where('SISA_TAGIHAN', '<=', 0)
+                                          ->sum('TOTAL') ?? 0;
+
+            // =====================================================
+            // GRAFIK 7 BULAN TERAKHIR (HANYA LUNAS)
+            // =====================================================
             $nama_bulan_id = ['','Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
             $bulan_tampil  = [];
             $data_penjualan = [];
@@ -41,20 +49,26 @@ class DashboardController extends Controller
                 $bulan_angka = $date->month;
                 $tahun_angka = $date->year;
 
-                $bulan_tampil[]   = $nama_bulan_id[$bulan_angka] . ' ' . $date->format('y');
-                $data_penjualan[] = DB::table('penjualan')
-                                      ->whereMonth('JATUH_TEMPO', $bulan_angka)
-                                      ->whereYear('JATUH_TEMPO', $tahun_angka)
-                                      ->sum('TOTAL') ?? 0;
+                $bulan_tampil[] = $nama_bulan_id[$bulan_angka] . ' ' . $date->format('y');
+
+                $total_bulan = DB::table('penjualan')
+                                   ->whereMonth('JATUH_TEMPO', $bulan_angka)
+                                   ->whereYear('JATUH_TEMPO', $tahun_angka)
+                                   ->where('SISA_TAGIHAN', '<=', 0) // <-- HANYA LUNAS
+                                   ->sum('TOTAL') ?? 0;
+
+                $data_penjualan[] = $total_bulan;
             }
 
             $data['bulan_tampil']   = $bulan_tampil;
             $data['data_penjualan'] = $data_penjualan;
 
+            // Pelanggan terbaru
             $data['customers'] = DB::table('pelanggan')
                                    ->orderByDesc('ID_PELANGGAN')
                                    ->limit(5)->get();
 
+            // Transaksi terakhir (semua status, tidak diubah)
             $data['transactions'] = DB::table('penjualan')
                                       ->leftJoin('pelanggan','penjualan.ID_PELANGGAN','=','pelanggan.ID_PELANGGAN')
                                       ->select('penjualan.ID_PENJUALAN','penjualan.JATUH_TEMPO as TANGGAL','penjualan.TOTAL','pelanggan.NAMA_PELANGGAN')

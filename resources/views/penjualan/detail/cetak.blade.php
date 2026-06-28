@@ -238,10 +238,7 @@
                         <td class="label">Subtotal :</td>
                         <td class="value">Rp {{ number_format($penjualan->SUBTOTAL, 0, ',', '.') }}</td>
                     </tr>
-                    <tr>
-                        <td class="label">Diskon :</td>
-                        <td class="value" style="color:#dc2626;">- Rp {{ number_format($penjualan->DISKON, 0, ',', '.') }}</td>
-                    </tr>
+                    <!-- BARIS DISKON DIHAPUS -->
                     <tr class="total-row">
                         <td class="label">TOTAL AKHIR :</td>
                         <td class="value">Rp {{ number_format($penjualan->TOTAL, 0, ',', '.') }}</td>

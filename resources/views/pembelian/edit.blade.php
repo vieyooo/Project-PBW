@@ -29,17 +29,16 @@
     .form-control {
         width: 100%; padding: 10px 14px; font-size: 13px;
         border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;
-        color: #000000; /* <--- Diubah di sini (Teks ketikan & dropdown jadi hitam pekat) */
+        color: #000000;
     }
     .form-control:focus {
         border-color: #b8860b; outline: none; box-shadow: 0 0 0 3px rgba(184,134,11,0.1);
     }
     .form-control[readonly] {
         background: #e2e8f0; cursor: not-allowed;
-        color: #000000; /* <--- Ditambahkan di sini (Teks input terkunci jadi hitam) */
+        color: #000000;
     }
     
-    /* Memaksa semua teks di dalam opsi pilihan dropdown berwarna hitam pekat */
     select.form-control option {
         color: #000000;
     }
@@ -164,18 +163,12 @@
        value="{{ old('ONGKOS_KIRIM', $pembelian->ONGKOS_KIRIM) }}" min="0" step="1" oninput="hitungOtomatis()">
             </div>
         </div>
-        <div class="form-group">
-            <label class="form-label">Diskon (Rp) <span class="optional">(opsional)</span></label>
-            <input type="number" name="DISKON" id="diskon" class="form-control"
-       value="{{ old('DISKON', $pembelian->DISKON) }}" min="0" step="1" oninput="hitungOtomatis()">
-        </div>
 
         <div class="computed-box" id="kalkulasiBox">
             <p><span>Jumlah Harga</span> <span id="show_jumlah">Rp {{ number_format($pembelian->JUMLAH_HARGA, 0, ',', '.') }}</span></p>
             <p><span>Nilai DPP (100/111)</span> <span id="show_dpp">Rp {{ number_format($pembelian->NILAI_DPP, 0, ',', '.') }}</span></p>
             <p><span>PPN 11%</span> <span id="show_ppn">Rp {{ number_format($pembelian->PPN, 0, ',', '.') }}</span></p>
             <p><span>Ongkos Kirim</span> <span id="show_ongkir">Rp {{ number_format($pembelian->ONGKOS_KIRIM, 0, ',', '.') }}</span></p>
-            <p><span>Diskon</span> <span id="show_diskon">- Rp {{ number_format($pembelian->DISKON, 0, ',', '.') }}</span></p>
             <p><span>Total Invoice</span> <span id="show_total">Rp {{ number_format($pembelian->TOTAL_INVOICE, 0, ',', '.') }}</span></p>
         </div>
 
@@ -229,17 +222,15 @@ function formatRupiah(angka) {
 function hitungOtomatis() {
     const jumlah = parseFloat(document.getElementById('jumlah_harga').value) || 0;
     const ongkir = parseFloat(document.getElementById('ongkos_kirim').value) || 0;
-    const diskon = parseFloat(document.getElementById('diskon').value) || 0;
 
     const dpp = jumlah * (100 / 111);
     const ppn = jumlah - dpp;
-    const total = (dpp + ppn + ongkir) - diskon;
+    const total = dpp + ppn + ongkir;
 
     document.getElementById('show_jumlah').textContent = formatRupiah(jumlah);
     document.getElementById('show_dpp').textContent = formatRupiah(dpp);
     document.getElementById('show_ppn').textContent = formatRupiah(ppn);
     document.getElementById('show_ongkir').textContent = formatRupiah(ongkir);
-    document.getElementById('show_diskon').textContent = '- ' + formatRupiah(diskon);
     document.getElementById('show_total').textContent = formatRupiah(total);
 }
 

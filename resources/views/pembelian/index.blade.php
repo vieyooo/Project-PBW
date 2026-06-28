@@ -46,7 +46,6 @@
     .text-right { text-align: right !important; }
     .text-center { text-align: center !important; }
     .rupiah-text { font-family: monospace; font-size: 13px; color: #334155; }
-    .rupiah-diskon { font-family: monospace; font-size: 13px; color: #dc2626; }
     .price-badge { background: #10b981; color: #ffffff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: monospace; display: inline-block; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2); }
     .tanggal-text { color: #64748b; font-size: 13px; }
     .action-buttons { display: flex; gap: 6px; align-items: center; flex-wrap: nowrap; }
@@ -90,7 +89,7 @@
                 @endforeach
             </div>
             <a href="{{ route('pembelian.create') }}" class="btn-primary">
-                <i class="fas fa-plus"></i> Tambah Barang
+                <i class="fas fa-plus"></i> Tambah Data
             </a>
         </div>
     </div>
@@ -106,7 +105,6 @@
                     <th class="text-right">Nilai DPP</th>
                     <th class="text-right">PPN</th>
                     <th class="text-right">Ongkir</th>
-                    <th class="text-right">Diskon</th>
                     <th class="text-center">Total</th>
                     <th class="text-center">Scan Nota</th>
                     <th>Aksi</th>
@@ -126,7 +124,6 @@
                         <td class="text-right rupiah-text">{{ format_rupiah($row->NILAI_DPP ?? 0) }}</td>
                         <td class="text-right rupiah-text">{{ format_rupiah($row->PPN ?? 0) }}</td>
                         <td class="text-right rupiah-text">{{ format_rupiah($row->ONGKOS_KIRIM) }}</td>
-                        <td class="text-right rupiah-diskon">- {{ format_rupiah($row->DISKON) }}</td>
                         <td class="text-center"><span class="price-badge">{{ format_rupiah($row->TOTAL_INVOICE) }}</span></td>
                         <td class="text-center">
                             @if($hasScan)
@@ -141,17 +138,12 @@
                         </td>
                        <td>
     <div class="action-buttons">
-        {{-- 1. Tombol Detail (Sudah diarahkan ke route show) --}}
         <a href="{{ route('pembelian.show', $row->NO_INVOICE) }}" class="btn-action btn-detail">
             <i class="fas fa-list"></i> Detail
         </a>
-
-        {{-- 2. Tombol Edit (Sudah diarahkan ke route edit) --}}
         <a href="{{ route('pembelian.edit', $row->NO_INVOICE) }}" class="btn-action btn-edit">
             <i class="fas fa-edit"></i> Edit
         </a>
-
-        {{-- 3. Form & Tombol Hapus (Wajib menggunakan FORM dengan @method('DELETE')) --}}
         <form action="{{ route('pembelian.destroy', $row->NO_INVOICE) }}" 
               method="POST" 
               style="display: inline;" 
@@ -167,7 +159,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="11">
+                        <td colspan="10">
                             <div class="empty-state">
                                 <i class="fas fa-file-invoice"></i>
                                 <p>Belum ada data pembelian</p>

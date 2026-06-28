@@ -139,48 +139,74 @@
 <div class="sidebar" id="sidebar">
     <div class="logo"><h2>vertue<span>.</span></h2></div>
     <div class="logo-mini">V<span>.</span></div>
+
+    {{-- ============================================================ --}}
+    {{--  NAVIGASI DENGAN URUTAN TETAP  --}}
+    {{--  URUTAN: Dashboard → Petugas → Pelanggan → Supplier → Bahan Baku → Barang/BOM → Pembelian → Penjualan  --}}
+    {{-- ============================================================ --}}
     <div class="nav">
-<div class="nav">
-    <div class="nav-item {{ Str::contains($menu, 'dashboard') ? 'active' : '' }}">
-        <a href="?menu=dashboard"><i class="fas fa-chart-pie"></i><span class="sidebar-text">Dashboard</span></a>
+
+        {{-- 1. DASHBOARD (Selalu) --}}
+        <div class="nav-item {{ Str::contains($menu, 'dashboard') ? 'active' : '' }}">
+            <a href="?menu=dashboard"><i class="fas fa-chart-pie"></i><span class="sidebar-text">Dashboard</span></a>
+        </div>
+
+        {{-- 2. PETUGAS (Hanya untuk role customer/owner) --}}
+        @if(Str::contains(strtolower(Auth::user()->JABATAN), ['customer', 'owner']))
+            <div class="nav-item {{ request()->routeIs('petugas.*') || Str::contains($menu, 'petugas') ? 'active' : '' }}">
+                <a href="{{ route('petugas.index') }}"><i class="fas fa-user-tie"></i><span class="sidebar-text">Petugas</span></a>
+            </div>
+        @endif
+
+        {{-- 3. PELANGGAN (Hanya untuk role customer/owner) --}}
+        @if(Str::contains(strtolower(Auth::user()->JABATAN), ['customer', 'owner']))
+            <div class="nav-item {{ request()->routeIs('pelanggans.*') || Str::contains($menu, 'pelanggan') ? 'active' : '' }}">
+                <a href="{{ route('pelanggans.index') }}"><i class="fas fa-user-friends"></i><span class="sidebar-text">Pelanggan</span></a>
+            </div>
+        @endif
+
+        {{-- 4. SUPPLIER (Hanya untuk role customer/owner) --}}
+        @if(Str::contains(strtolower(Auth::user()->JABATAN), ['customer', 'owner']))
+            <div class="nav-item {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
+                <a href="{{ route('suppliers.index') }}"><i class="fas fa-truck"></i><span class="sidebar-text">Supplier</span></a>
+            </div>
+        @endif
+
+        {{-- 5. BAHAN BAKU (Hanya untuk role production/owner) --}}
+        @if(Str::contains(strtolower(Auth::user()->JABATAN), ['production', 'owner']))
+            <div class="nav-item {{ request()->routeIs('bahan-bakus.*') ? 'active' : '' }}">
+                <a href="{{ route('bahan-bakus.index') }}"><i class="fas fa-boxes"></i><span class="sidebar-text">Bahan Baku</span></a>
+            </div>
+        @endif
+
+        {{-- 6. BARANG / BOM (Hanya untuk role production/owner) --}}
+        @if(Str::contains(strtolower(Auth::user()->JABATAN), ['production', 'owner']))
+            <div class="nav-item {{ request()->routeIs('barang.*') ? 'active' : '' }}">
+                <a href="{{ route('barang.index') }}"><i class="fas fa-box"></i><span class="sidebar-text">Barang / BOM</span></a>
+            </div>
+        @endif
+
+        {{-- 7. PEMBELIAN (Selalu) --}}
+        <div class="nav-item {{ request()->routeIs('pembelian.*') ? 'active' : '' }}">
+            <a href="{{ route('pembelian.index') }}"><i class="fas fa-shopping-cart"></i><span class="sidebar-text">Pembelian</span></a>
+        </div>
+
+        {{-- 8. PENJUALAN (Hanya untuk role customer/owner) — DIPINDAHKAN KE BAWAH PEMBELIAN --}}
+        @if(Str::contains(strtolower(Auth::user()->JABATAN), ['customer', 'owner']))
+            <div class="nav-item {{ request()->routeIs('penjualan.*') ? 'active' : '' }}">
+                <a href="{{ route('penjualan.index') }}"><i class="fas fa-file-invoice-dollar"></i><span class="sidebar-text">Penjualan</span></a>
+            </div>
+        @endif
+
     </div>
 
-    @if(Str::contains(strtolower(Auth::user()->JABATAN), ['customer', 'owner']))
-        <div class="nav-item {{ request()->routeIs('petugas.*') || Str::contains($menu, 'petugas') ? 'active' : '' }}">
-            <a href="{{ route('petugas.index') }}"><i class="fas fa-user-tie"></i><span class="sidebar-text">Petugas</span></a>
-        </div>
-        <div class="nav-item {{ request()->routeIs('pelanggans.*') || Str::contains($menu, 'pelanggan') ? 'active' : '' }}">
-            <a href="{{ route('pelanggans.index') }}"><i class="fas fa-user-friends"></i><span class="sidebar-text">Pelanggan</span></a>
-        </div>
-        <div class="nav-item {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
-            <a href="{{ route('suppliers.index') }}"><i class="fas fa-truck"></i><span class="sidebar-text">Supplier</span></a>
-        </div>
-        <div class="nav-item {{ request()->routeIs('penjualan.*') ? 'active' : '' }}">
-            <a href="{{ route('penjualan.index') }}"><i class="fas fa-file-invoice-dollar"></i><span class="sidebar-text">Penjualan</span></a>
-        </div>
-    @endif
-
-    @if(Str::contains(strtolower(Auth::user()->JABATAN), ['production', 'owner']))
-        <div class="nav-item {{ request()->routeIs('bahan-bakus.*') ? 'active' : '' }}">
-            <a href="{{ route('bahan-bakus.index') }}"><i class="fas fa-boxes"></i><span class="sidebar-text">Bahan Baku</span></a>
-        </div>
-        <div class="nav-item {{ request()->routeIs('barang.*') ? 'active' : '' }}">
-            <a href="{{ route('barang.index') }}"><i class="fas fa-box"></i><span class="sidebar-text"> Barang / BOM</span></a>
-        </div>
-    @endif
-
-    <div class="nav-item {{ request()->routeIs('pembelian.*') ? 'active' : '' }}">
-        <a href="{{ route('pembelian.index') }}"><i class="fas fa-shopping-cart"></i><span class="sidebar-text">Pembelian</span></a>
-    </div>
-</div>
-    </div>
-        <div style="margin-top:40px; border-top:1px solid #e2e8f0; padding-top:12px;"></div>
-        <div class="nav-item">
-            <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin keluar dari Dashboard?')) { document.getElementById('logout-form').submit(); }">
-                <i class="fas fa-sign-out-alt" style="color: #dc2626;"></i>
-                <span class="sidebar-text" style="color: #dc2626;">Logout</span>
-            </a>
-        </div>
+    {{-- LOGOUT --}}
+    <div style="margin-top:40px; border-top:1px solid #e2e8f0; padding-top:12px;"></div>
+    <div class="nav-item">
+        <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin keluar dari Dashboard?')) { document.getElementById('logout-form').submit(); }">
+            <i class="fas fa-sign-out-alt" style="color: #dc2626;"></i>
+            <span class="sidebar-text" style="color: #dc2626;">Logout</span>
+        </a>
     </div>
 </div>
 
@@ -302,7 +328,7 @@
                                     <div class="customer-name">{{ $row->NAMA_PELANGGAN }}</div>
                                     <div class="customer-address">{{ Str::limit($row->ALAMAT ?? '', 40) }}</div>
                                 </div>
-                                <div class="customer-status"><i class="fas fa-check"></i> Hack</div>
+                                <div class="customer-status"><i class="fas fa-check"></i> Aktif</div>
                             </div>
                             @endforeach
                         @else
@@ -388,18 +414,7 @@
                 </script>
             @break
 
-            {{--
-                CATATAN: Case di bawah ini (petugas, pelanggan, supplier, bahanbaku,
-                barang, pembelian, penjualan, beserta semua sub-menunya) SUDAH TIDAK
-                DIPAKAI oleh sidebar lagi, karena sidebar sekarang pakai route resource
-                asli (mis. route('bahan-bakus.index')) yang sudah punya controller &
-                view sendiri. Ini ditinggalkan dulu (bukan dihapus) untuk jaga-jaga
-                kalau ada bagian lain di project yang masih manggil ?menu=..., dan agar
-                aman kalau memang masih dipakai di tempat lain yang belum dicek.
-                Sebagian besar view yang di-@include di sini (mis. bahanbaku.bahanbaku-lihat,
-                barang.barang-lihat, supplier.supplier-lihat, penjualan.penjualan-lihat)
-                TIDAK ADA filenya di resources/views — itu sumber error 500 sebelumnya.
-            --}}
+            {{-- CASE UNTUK MENU LAINNYA (tetap seperti semula) --}}
             @case('petugas')
                 <script>window.location.href = "{{ route('petugas.index') }}";</script>
             @break
@@ -438,22 +453,26 @@
             @case('barangBOM-ubah') @include('barang.barangBOM-ubah') @break
             @case('barangBOM-hapus') @include('barang.barangBOM-hapus') @break
             
-         {{-- PEMBELIAN --}}
-@case('pembelian') @include('pembelian.pembelian-lihat') @break
-@case('pembelian-tambah') @include('pembelian.pembelian-tambah') @break
-@case('pembelian-ubah') @include('pembelian.pembelian-ubah') @break
-@case('pembelian-hapus') @include('pembelian.pembelian-hapus') @break
+            {{-- PEMBELIAN --}}
+            @case('pembelian') @include('pembelian.pembelian-lihat') @break
+            @case('pembelian-tambah') @include('pembelian.pembelian-tambah') @break
+            @case('pembelian-ubah') @include('pembelian.pembelian-ubah') @break
+            @case('pembelian-hapus') @include('pembelian.pembelian-hapus') @break
 
-{{-- DETAIL PEMBELIAN --}}
-@case('detailpembelian-lihat') @include('pembelian.detailpembelian-lihat') @break
-@case('detailpembelian-tambah') @include('pembelian.detailpembelian-tambah') @break
-@case('detailpembelian-ubah') @include('pembelian.detailpembelian-ubah') @break
-@case('detailpembelian-hapus') @include('pembelian.detailpembelian-hapus') @break
+            {{-- DETAIL PEMBELIAN --}}
+            @case('detailpembelian-lihat') @include('pembelian.detailpembelian-lihat') @break
+            @case('detailpembelian-tambah') @include('pembelian.detailpembelian-tambah') @break
+            @case('detailpembelian-ubah') @include('pembelian.detailpembelian-ubah') @break
+            @case('detailpembelian-hapus') @include('pembelian.detailpembelian-hapus') @break
+
+            {{-- PENJUALAN --}}
             @case('penjualan')
             @case('penjualan-lihat') @include('penjualan.penjualan-lihat') @break
             @case('penjualan-tambah') @include('penjualan.penjualan-tambah') @break
             @case('penjualan-ubah') @include('penjualan.penjualan-ubah') @break
             @case('penjualan-hapus') @include('penjualan.penjualan-hapus') @break
+
+            {{-- DETAIL PENJUALAN --}}
             @case('detailpenjualan-lihat') @include('penjualan.detailpenjualan-lihat') @break
             @case('detailpenjualan-tambah') @include('penjualan.detailpenjualan-tambah') @break
             @case('detailpenjualan-ubah') @include('penjualan.detailpenjualan-ubah') @break

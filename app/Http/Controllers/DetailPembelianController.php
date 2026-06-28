@@ -23,14 +23,14 @@ class DetailPembelianController extends Controller
         $request->validate([
             'ID_BAHAN_BAKU' => 'required|exists:bahan_baku,ID_BAHAN_BAKU',
             'QTY'           => 'required|integer|min:1',
-            'HARGA_JUAL'    => 'required|numeric|min:1',
+            'HARGA_BELI'    => 'required|numeric|min:1', // diubah
         ]);
 
         DetailPembelian::create([
             'NO_INVOICE'    => $no_invoice,
             'ID_BAHAN_BAKU' => $request->ID_BAHAN_BAKU,
             'QTY'           => $request->QTY,
-            'HARGA_JUAL'    => $request->HARGA_JUAL,
+            'HARGA_BELI'    => $request->HARGA_BELI, // diubah
         ]);
 
         $this->updateTotal($no_invoice);
@@ -41,37 +41,33 @@ class DetailPembelianController extends Controller
 
     // FORM edit qty/harga
     public function edit($no_invoice, $id_bahan)
-{
-    // 1. Ambil data detail pembelian yang ingin diedit berdasarkan Invoice dan ID Bahan Baku
-    // (Sesuaikan nama kolom primary key jika di modelmu berbeda)
-    $detail = \App\Models\DetailPembelian::where('NO_INVOICE', $no_invoice)
-        ->where('ID_BAHAN_BAKU', $id_bahan)
-        ->firstOrFail();
+    {
+        $detail = DetailPembelian::where('NO_INVOICE', $no_invoice)
+            ->where('ID_BAHAN_BAKU', $id_bahan)
+            ->firstOrFail();
 
-    // 2. Ambil semua data bahan baku untuk keperluan dropdown/opsi pengganti jika dibutuhkan
-    $bahanBakus = \App\Models\BahanBaku::orderBy('JENIS', 'asc')->get();
+        $bahanBakus = BahanBaku::orderBy('JENIS', 'asc')->get();
 
-    // 3. Kirim ketiganya ke view detail-ubah, pastikan menggunakan camelCase ($noInvoice) sesuai file blade-mu
-    return view('pembelian.detail-ubah', [
-        'noInvoice'  => $no_invoice,
-        'detail'     => $detail,
-        'bahanBakus' => $bahanBakus
-    ]);
-}
+        return view('pembelian.detail-ubah', [
+            'noInvoice'  => $no_invoice,
+            'detail'     => $detail,
+            'bahanBakus' => $bahanBakus
+        ]);
+    }
 
     // SIMPAN edit qty/harga
     public function update(Request $request, $no_invoice, $id_bahan)
     {
         $request->validate([
             'QTY'        => 'required|integer|min:1',
-            'HARGA_JUAL' => 'required|numeric|min:1',
+            'HARGA_BELI' => 'required|numeric|min:1', // diubah
         ]);
 
         DetailPembelian::where('NO_INVOICE', $no_invoice)
             ->where('ID_BAHAN_BAKU', $id_bahan)
             ->update([
                 'QTY'        => $request->QTY,
-                'HARGA_JUAL' => $request->HARGA_JUAL,
+                'HARGA_BELI' => $request->HARGA_BELI, // diubah
             ]);
 
         $this->updateTotal($no_invoice);
@@ -97,7 +93,7 @@ class DetailPembelianController extends Controller
     private function updateTotal($no_invoice)
     {
         $total = DetailPembelian::where('NO_INVOICE', $no_invoice)
-            ->selectRaw('SUM(QTY * HARGA_JUAL) as total')
+            ->selectRaw('SUM(QTY * HARGA_BELI) as total') // diubah
             ->value('total');
 
         Pembelian::where('NO_INVOICE', $no_invoice)

@@ -69,7 +69,6 @@
         font-weight: 600;
         border-color: #e2e8f0;
     }
-    textarea.form-control { min-height: 60px; resize: vertical; }
     .form-row { display: flex; gap: 16px; }
     .form-col { flex: 1; }
     .form-actions {
@@ -164,8 +163,8 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label class="form-label">Harga Satuan (Rp) <span>*</span></label>
-                    <input type="text" name="harga_satuan" class="form-control" value="{{ old('harga_satuan', number_format($data->HARGA_SATUAN, 0, ',', '.')) }}" required autocomplete="off">
+                    <label class="form-label">Harga Beli (Rp) <span>*</span></label>
+                    <input type="text" name="harga_beli" class="form-control" value="{{ old('harga_beli', number_format($data->HARGA_BELI, 0, ',', '.')) }}" required autocomplete="off">
                 </div>
             </div>
             <div class="form-col">

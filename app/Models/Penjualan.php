@@ -13,9 +13,17 @@ class Penjualan extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'ID_PENJUALAN', 'TANGGAL', 'JATUH_TEMPO', 'ID_PETUGAS',
-        'ID_PELANGGAN', 'SUBTOTAL', 'DISKON', 'TOTAL',
-        'SISA_TAGIHAN', 'PESAN', 'TERBILANG'
+        'ID_PENJUALAN', 
+        'TANGGAL', 
+        'JATUH_TEMPO', 
+        'ID_PETUGAS',
+        'ID_PELANGGAN', 
+        'SUBTOTAL', 
+        // 'DISKON', // dihapus
+        'TOTAL',
+        'SISA_TAGIHAN', 
+        'PESAN', 
+        'TERBILANG'
     ];
 
     public function petugas()

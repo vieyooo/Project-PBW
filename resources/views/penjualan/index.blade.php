@@ -96,7 +96,6 @@
                     <th>Petugas</th>
                     <th>Pelanggan</th>
                     <th class="text-right">Subtotal</th>
-                    <th class="text-right">Diskon</th>
                     <th class="text-right">Total</th>
                     <th class="text-right">Sisa Tagihan</th>
                     <th class="text-center">Status</th>
@@ -117,7 +116,6 @@
                     <td><strong>{{ $row->petugas->NAMA_PETUGAS ?? $row->ID_PETUGAS }}</strong></td>
                     <td><strong>{{ $row->pelanggan->NAMA_PELANGGAN ?? $row->ID_PELANGGAN }}</strong></td>
                     <td class="text-right">Rp {{ number_format($row->SUBTOTAL, 2, ',', '.') }}</td>
-                    <td class="text-right">Rp {{ number_format($row->DISKON, 2, ',', '.') }}</td>
                     <td class="text-right"><strong>Rp {{ number_format($row->TOTAL, 2, ',', '.') }}</strong></td>
                     <td class="text-right">Rp {{ number_format($row->SISA_TAGIHAN, 2, ',', '.') }}</td>
                     <td class="text-center">
@@ -148,7 +146,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="13">
+                    <td colspan="12">
                         <div class="empty-state">
                             <i class="fas fa-search"></i>
                             <h4>Data Tidak Ditemukan</h4>

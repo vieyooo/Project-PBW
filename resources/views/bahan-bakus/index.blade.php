@@ -68,7 +68,6 @@
         width: 100%;
         border-collapse: collapse;
         text-align: left;
-        border: 1px #0f172a;
     }
     .data-table thead th {
         background-color: #b8870bf2;
@@ -80,7 +79,6 @@
         padding: 14px 16px;
         border-bottom: 2px solid #e2e8f0;
         white-space: nowrap;
-        text-align: left;
     }
     .data-table tbody td {
         padding: 12px 16px;
@@ -101,7 +99,6 @@
         font-weight: 600;
         font-family: monospace;
         display: inline-block;
-        text-align: center;
     }
     .price-badge {
         background: #10b981;
@@ -112,8 +109,6 @@
         font-weight: 600;
         font-family: monospace;
         display: inline-block;
-        text-align: center;
-        letter-spacing: 0.5px;
         box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
     }
     .supplier-name { font-weight: 600; color: #0f172a; }
@@ -143,17 +138,15 @@
         color: #2563eb;
         border: 1px solid #bfdbfe;
     }
-    .btn-edit:hover { background: #3b82f6; color: white; border-color: #3b82f6; }
+    .btn-edit:hover { background: #3b82f6; color: white; }
     .btn-delete {
         background: #fef2f2;
         color: #dc2626;
         border: 1px solid #fecaca;
     }
-    .btn-delete:hover { background: #ef4444; color: white; border-color: #ef4444; }
+    .btn-delete:hover { background: #ef4444; color: white; }
     .empty-state { text-align: center; padding: 60px 20px; }
     .empty-state i { font-size: 48px; color: #cbd5e1; margin-bottom: 16px; }
-    .empty-state h4 { color: #475569; margin-bottom: 8px; }
-    .empty-state p { color: #94a3b8; font-size: 14px; }
     .limit-selector {
         display: flex;
         align-items: center;
@@ -190,51 +183,51 @@
         margin-bottom: 20px;
     }
     .pagination {
-        margin-top: 0;
-        padding-top: 16px;
-        padding-bottom: 4px;
+        margin-top: 24px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 12px;
-        border-top: 1px solid #f1f5f9;
+        gap: 16px;
     }
-    .pagination-info {
-        font-size: 13px;
-        color: #64748b;
-        background: transparent;
-        padding: 0;
-        border-radius: 0;
+    .pagination-links {
         display: flex;
-        align-items: center;
         gap: 6px;
+        flex-wrap: wrap;
     }
-    .pagination-links { display: flex; gap: 8px; align-items: center; }
     .pagination-links a, .pagination-links span {
         padding: 8px 14px;
-        border-radius: 8px;
-        border: 1px solid #e2e8f0;
-        background: #ffffff;
-        color: #475569;
+        border-radius: 10px;
         text-decoration: none;
         font-size: 14px;
         font-weight: 500;
-        min-width: 36px;
-        text-align: center;
+        transition: all 0.2s ease;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #475569;
     }
-    .pagination-links a:hover { background: #f1f5f9; }
+    .pagination-links a:hover {
+        background: #b8860b;
+        color: white;
+        border-color: #b8860b;
+    }
     .pagination-links .active-page {
         background: #b8860b;
         color: white;
         border-color: #b8860b;
-        font-weight: 700;
     }
-    .pagination-links .disabled { color: #cbd5e1; background: #f8fafc; cursor: not-allowed; }
+    .pagination-info {
+        font-size: 13px;
+        color: #64748b;
+        background: #f8fafc;
+        padding: 6px 16px;
+        border-radius: 30px;
+        border: 1px solid #e2e8f0;
+    }
     @media (max-width: 768px) {
         .table-container { padding: 16px; }
         .action-header { flex-direction: column; align-items: flex-start; }
-        .data-table thead th, .data-table tbody td { padding: 10px 12px; }
+        .data-table thead th, .data-table tbody td { padding: 8px 12px; }
         .action-buttons { flex-wrap: wrap; }
         .pagination { flex-direction: column; align-items: flex-start; gap: 12px; }
     }
@@ -271,22 +264,22 @@
                     <th style="width: 12%;">ID BAHAN</th>
                     <th style="width: 25%;">Jenis</th>
                     <th style="width: 15%;">Kode</th>
-                    <th style="width: 15%;">Harga Satuan</th>
+                    <th style="width: 15%;">Harga Beli</th>
                     <th style="width: 10%; text-align: center;">Satuan</th>
                     <th style="width: 8%; text-align: center;">Stok</th>
                     <th style="width: 15%;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-               @php
-    $sortedBahan = $bahanBaku->getCollection()->sortByDesc('ID_BAHAN_BAKU');
-@endphp
-@forelse($sortedBahan as $b)
+                @php
+                    $sortedBahan = $bahanBaku->getCollection()->sortByDesc('ID_BAHAN_BAKU');
+                @endphp
+                @forelse($sortedBahan as $b)
                 <tr>
                     <td><span class="id-badge">{{ $b->ID_BAHAN_BAKU }}</span></td>
                     <td class="supplier-name">{{ $b->JENIS }}</td>
                     <td>{{ $b->KODE }}</td>
-                    <td><span class="price-badge">Rp {{ number_format($b->HARGA_SATUAN, 0, ',', '.') }}</span></td>
+                    <td><span class="price-badge">Rp {{ number_format($b->HARGA_BELI, 0, ',', '.') }}</span></td>
                     <td style="text-align: center;">{{ $b->SATUAN }}</td>
                     <td style="text-align: center;"><strong>{{ $b->STOK }}</strong></td>
                     <td>
@@ -321,10 +314,11 @@
     @if($bahanBaku->total() > 0)
     <div class="pagination">
         <div class="pagination-info">
-            <i class="fas fa-database" style="font-size: 12px; color: #94a3b8;"></i>
-            Menampilkan data {{ $bahanBaku->firstItem() }} - {{ $bahanBaku->lastItem() }} dari {{ $bahanBaku->total() }} bahan baku
+            <i class="fas fa-database"></i> Menampilkan data {{ $bahanBaku->firstItem() }} - {{ $bahanBaku->lastItem() }} dari {{ $bahanBaku->total() }} bahan baku
         </div>
-        {{ $bahanBaku->appends(['limit' => request('limit', 10)])->links('vendor.pagination.custom') }}
+        <div class="pagination-links">
+            {{ $bahanBaku->appends(['limit' => request('limit', 10)])->links('vendor.pagination.custom') }}
+        </div>
     </div>
     @endif
 </div>

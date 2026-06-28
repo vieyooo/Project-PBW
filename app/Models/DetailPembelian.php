@@ -9,7 +9,7 @@ class DetailPembelian extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'NO_INVOICE', 'ID_BAHAN_BAKU', 'QTY', 'HARGA_JUAL'
+        'NO_INVOICE', 'ID_BAHAN_BAKU', 'QTY', 'HARGA_BELI'
     ];
 
     // Relasi ke Pembelian

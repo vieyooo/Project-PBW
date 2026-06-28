@@ -69,7 +69,6 @@
         font-weight: 600;
         border-color: #e2e8f0;
     }
-    textarea.form-control { min-height: 60px; resize: vertical; }
     .form-row { display: flex; gap: 16px; }
     .form-col { flex: 1; }
     .form-actions {
@@ -154,14 +153,14 @@
 
         <div class="form-group">
             <label class="form-label">Jenis Bahan <span>*</span></label>
-            <input type="text" name="jenis" class="form-control" placeholder="Contoh: Kulit Sapi Premium (Wollsdorf)" required autocomplete="off" value="{{ old('jenis') }}">
+            <input type="text" name="jenis" class="form-control" placeholder="Contoh: Kulit Sapi Premium" required autocomplete="off" value="{{ old('jenis') }}">
         </div>
 
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label class="form-label">Harga Satuan (Rp) <span>*</span></label>
-                    <input type="text" name="harga_satuan" class="form-control" placeholder="Contoh: 800000" required autocomplete="off" value="{{ old('harga_satuan') }}">
+                    <label class="form-label">Harga Beli (Rp) <span>*</span></label>
+                    <input type="text" name="harga_beli" class="form-control" placeholder="Contoh: 800000" required autocomplete="off" value="{{ old('harga_beli') }}">
                 </div>
             </div>
             <div class="form-col">

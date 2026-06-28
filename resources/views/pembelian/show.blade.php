@@ -148,7 +148,7 @@
                         <th style="width: 20%;">Jenis</th>
                         <th style="width: 10%;">Satuan</th>
                         <th style="width: 5%; text-align: center;">Qty</th>
-                        <th style="width: 15%;">Harga Jual</th>
+                        <th style="width: 15%;">Harga Beli</th>
                         <th style="width: 15%;">Subtotal</th>
                         <th style="width: 10%; text-align: center;">Aksi</th>
                     </tr>
@@ -156,22 +156,16 @@
                 <tbody>
                     @foreach($details as $row)
                         @php
-                            // NAMA KOLOM DIUBAH MENJADI HURUF BESAR: QTY & HARGA_JUAL
-                            $subtotal = $row->QTY * $row->HARGA_JUAL;
+                            $subtotal = $row->QTY * $row->HARGA_BELI;
                             $grandTotal += $subtotal;
                         @endphp
                         <tr>
-                            {{-- NAMA KOLOM DIUBAH MENJADI HURUF BESAR: ID_BAHAN_BAKU --}}
                             <td><strong>{{ $row->ID_BAHAN_BAKU }}</strong></td>
-                            
-                            {{-- MENGAMBIL DARI RELASI BAHAN BAKU JIKA ADA (KODE, JENIS, SATUAN) --}}
                             <td>{{ $row->bahanBaku->KODE ?? $row->KODE ?? '-' }}</td>
                             <td>{{ $row->bahanBaku->JENIS ?? $row->JENIS ?? '-' }}</td>
                             <td>{{ $row->bahanBaku->SATUAN ?? $row->SATUAN ?? '-' }}</td>
-                            
-                            {{-- NAMA KOLOM DIUBAH MENJADI HURUF BESAR: QTY & HARGA_JUAL --}}
                             <td style="text-align: center;">{{ number_format($row->QTY, 0, ',', '.') }}</td>
-                            <td>Rp {{ number_format($row->HARGA_JUAL, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($row->HARGA_BELI, 0, ',', '.') }}</td>
                             <td><strong>Rp {{ number_format($subtotal, 0, ',', '.') }}</strong></td>
                             <td>
                                 <div class="action-buttons">

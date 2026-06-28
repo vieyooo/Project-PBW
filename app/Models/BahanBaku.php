@@ -16,8 +16,14 @@ class BahanBaku extends Model
         'ID_BAHAN_BAKU',
         'JENIS',
         'KODE',
-        'HARGA_SATUAN',
+        'HARGA_BELI', // <-- Pastikan ini ada
         'SATUAN',
         'STOK',
     ];
+
+    // Relasi ke BOM
+    public function boms()
+    {
+        return $this->hasMany(Bom::class, 'ID_BAHAN_BAKU', 'ID_BAHAN_BAKU');
+    }
 }

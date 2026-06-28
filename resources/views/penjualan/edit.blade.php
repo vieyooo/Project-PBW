@@ -4,7 +4,6 @@
 
 @section('content')
 <style>
-    /* Sama seperti create */
     .form-container { background: #ffffff; border-radius: 20px; border: 1px solid #e2e8f0; padding: 24px 32px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03); width: 100%; max-width: 900px; margin: 0 auto; }
     .form-header { margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px dashed #f1f5f9; }
     .form-header h3 { font-size: 18px; font-weight: 700; color: #0f172a; display: flex; align-items: center; margin: 0; }
@@ -104,15 +103,6 @@
             </div>
             <div class="form-col">
                 <div class="form-group">
-                    <label class="form-label">Diskon</label>
-                    <div class="input-group">
-                        <span class="input-group-text">Rp</span>
-                        <input type="number" name="DISKON" id="input_diskon" class="form-control" value="{{ $penjualan->DISKON }}" min="0" step="0.01">
-                    </div>
-                </div>
-            </div>
-            <div class="form-col">
-                <div class="form-group">
                     <label class="form-label">Total Harga</label>
                     <div class="input-group">
                         <span class="input-group-text">Rp</span>
@@ -154,18 +144,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const subtotalInput = document.getElementById('input_subtotal');
-        const diskonInput = document.getElementById('input_diskon');
         const totalInput = document.getElementById('input_total');
 
         function calculateTotal() {
             const subtotal = parseFloat(subtotalInput.value) || 0;
-            const diskon = parseFloat(diskonInput.value) || 0;
-            const total = Math.max(0, subtotal - diskon);
-            totalInput.value = total;
+            totalInput.value = subtotal; // tanpa diskon
         }
 
         subtotalInput.addEventListener('input', calculateTotal);
-        diskonInput.addEventListener('input', calculateTotal);
     });
 </script>
 @endsection

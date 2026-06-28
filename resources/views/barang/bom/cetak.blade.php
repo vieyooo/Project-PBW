@@ -89,7 +89,6 @@
         .bom-table th.right, .bom-table td.right { text-align: right; }
         .bom-table th.center, .bom-table td.center { text-align: center; }
 
-        /* Tombol cetak — pill shape sesuai referensi */
         .print-btn {
             position: fixed;
             bottom: 30px;
@@ -174,7 +173,7 @@
                         <th style="width:10%;">ID Bahan</th>
                         <th style="width:35%;">Jenis Bahan</th>
                         <th style="width:10%;" class="center">Jumlah</th>
-                        <th style="width:15%;" class="right">Harga Satuan</th>
+                        <th style="width:15%;" class="right">Harga Beli</th>
                         <th style="width:15%;" class="right">Total Harga</th>
                     </tr>
                 </thead>
@@ -188,7 +187,7 @@
                         </td>
                         <td>{{ $item->JENIS }}</td>
                         <td class="center">{{ number_format($item->JUMLAH, 2, ',', '.') }}</td>
-                        <td class="right">Rp {{ number_format($item->HARGA_SATUAN, 0, ',', '.') }}</td>
+                        <td class="right">Rp {{ number_format($item->HARGA_BELI, 0, ',', '.') }}</td>
                         <td class="right">Rp {{ number_format($item->TOTAL_HARGA, 0, ',', '.') }}</td>
                     </tr>
                     @endforeach

@@ -91,7 +91,6 @@
 
         <div class="form-group">
             <label class="form-label">Pilih Bahan Baku <span style="color:red;">*</span></label>
-            {{-- SUDAH DIPERBAIKI: name="ID_BAHAN_BAKU" (tanpa huruf s di ujung) --}}
             <select name="ID_BAHAN_BAKU" class="form-control" required>
                 <option value="">-- Pilih Bahan Baku --</option>
                 @foreach($bahanBakus as $b)
@@ -108,17 +107,15 @@
 
         <div class="form-group">
             <label class="form-label">Qty <span style="color:red;">*</span></label>
-            {{-- DISESUAIKAN: menggunakan name="QTY" kapital --}}
             <input type="number" name="QTY" class="form-control" required min="1"
                    value="{{ old('QTY', 1) }}">
             <p class="form-hint">Jumlah bahan baku yang dibeli.</p>
         </div>
 
         <div class="form-group">
-            <label class="form-label">Harga Jual (Rp) <span style="color:red;">*</span></label>
-            {{-- DISESUAIKAN: menggunakan name="HARGA_JUAL" kapital --}}
-            <input type="number" name="HARGA_JUAL" class="form-control" required min="0" step="1000"
-                   placeholder="Contoh: 500000" value="{{ old('HARGA_JUAL') }}">
+            <label class="form-label">Harga Beli (Rp) <span style="color:red;">*</span></label>
+            <input type="number" name="HARGA_BELI" class="form-control" required min="0" step="1000"
+                   placeholder="Contoh: 500000" value="{{ old('HARGA_BELI') }}">
             <p class="form-hint">Harga per unit dari supplier.</p>
         </div>
 

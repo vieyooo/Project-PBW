@@ -5,7 +5,7 @@
 @section('content')
 @php
     $totalBiayaBahan = $bomData->sum(function ($item) {
-        return $item->JUMLAH * $item->HARGA_SATUAN;
+        return $item->JUMLAH * $item->HARGA_BELI;
     });
     $biayaProduksi = $totalBiayaBahan * 0.30;
     $hpp = $totalBiayaBahan + $biayaProduksi;
@@ -28,6 +28,7 @@
     }
 @endphp
 <style>
+    /* (CSS sama seperti sebelumnya, tidak perlu diubah) */
     .detail-container {
         background: #ffffff;
         border-radius: 20px;
@@ -96,7 +97,6 @@
     .empty-state { text-align: center; padding: 40px; color: #94a3b8; }
     .empty-state i { font-size: 40px; color: #cbd5e1; margin-bottom: 12px; display: block; }
 
-    /* ── SUMMARY STRIP (minimalis, tanpa card) ── */
     .summary-strip {
         margin-top: 28px;
         padding-top: 0;
@@ -252,7 +252,7 @@
                         <th style="width:12%;">ID Bahan</th>
                         <th style="width:33%;">Jenis Bahan</th>
                         <th style="width:10%;text-align:center;">Jumlah</th>
-                        <th style="width:15%;">Harga Satuan</th>
+                        <th style="width:15%;">Harga Beli</th>
                         <th style="width:15%;">Total Harga</th>
                         <th style="width:5%;text-align:center;">Aksi</th>
                     </tr>
@@ -268,8 +268,8 @@
                         </td>
                         <td>{{ $item->JENIS }}</td>
                         <td style="text-align:center;">{{ number_format($item->JUMLAH, 2, ',', '.') }}</td>
-                        <td>{{ rp($item->HARGA_SATUAN) }}</td>
-                        <td><strong>{{ rp($item->JUMLAH * $item->HARGA_SATUAN) }}</strong></td>
+                        <td>{{ rp($item->HARGA_BELI) }}</td>
+                        <td><strong>{{ rp($item->JUMLAH * $item->HARGA_BELI) }}</strong></td>
                         <td>
                             <div class="action-buttons">
                                 <a href="{{ route('barang.bom.edit', [$barang->ID_BARANG, $item->ID_BAHAN_BAKU]) }}" class="btn-action btn-edit"><i class="fas fa-edit"></i> Edit</a>
@@ -312,7 +312,6 @@
                         <span class="s-pct">({{ number_format($persentaseLaba, 1) }}%)</span>
                     </span>
                 </div>
-
             </div>
         </div>
 

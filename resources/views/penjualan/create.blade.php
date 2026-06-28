@@ -99,15 +99,6 @@
             </div>
             <div class="form-col">
                 <div class="form-group">
-                    <label class="form-label">Diskon</label>
-                    <div class="input-group">
-                        <span class="input-group-text">Rp</span>
-                        <input type="number" name="DISKON" id="input_diskon" class="form-control" placeholder="0" value="0" min="0" step="0.01">
-                    </div>
-                </div>
-            </div>
-            <div class="form-col">
-                <div class="form-group">
                     <label class="form-label">Total Harga</label>
                     <div class="input-group">
                         <span class="input-group-text">Rp</span>
@@ -149,18 +140,15 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const subtotalInput = document.getElementById('input_subtotal');
-        const diskonInput = document.getElementById('input_diskon');
         const totalInput = document.getElementById('input_total');
 
         function calculateTotal() {
             const subtotal = parseFloat(subtotalInput.value) || 0;
-            const diskon = parseFloat(diskonInput.value) || 0;
-            const total = Math.max(0, subtotal - diskon);
-            totalInput.value = total;
+            // Tanpa diskon, total = subtotal
+            totalInput.value = subtotal;
         }
 
         subtotalInput.addEventListener('input', calculateTotal);
-        diskonInput.addEventListener('input', calculateTotal);
     });
 </script>
 @endsection

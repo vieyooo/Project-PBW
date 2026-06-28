@@ -97,23 +97,20 @@
                    readonly>
         </div>
 
-        {{-- 1. BAGIAN INPUT QTY --}}
-<div class="form-group">
-    <label class="form-label">Qty <span style="color:red;">*</span></label>
-    {{-- UBAH name="qty" MENJADI name="QTY" --}}
-    <input type="number" name="QTY" class="form-control" required min="1"
-           value="{{ old('QTY', $detail->QTY) }}">
-    <p class="form-hint">Jumlah bahan baku yang dibeli.</p>
-</div>
+        <div class="form-group">
+            <label class="form-label">Qty <span style="color:red;">*</span></label>
+            <input type="number" name="QTY" class="form-control" required min="1"
+                   value="{{ old('QTY', $detail->QTY) }}">
+            <p class="form-hint">Jumlah bahan baku yang dibeli.</p>
+        </div>
 
-{{-- 2. BAGIAN INPUT HARGA JUAL --}}
-<div class="form-group">
-    <label class="form-label">Harga Jual (Rp) <span style="color:red;">*</span></label>
-    {{-- UBAH name="harga_jual" MENJADI name="HARGA_JUAL" --}}
-    <input type="number" name="HARGA_JUAL" class="form-control" required min="0" step="1000"
-           placeholder="Contoh: 500000" value="{{ old('HARGA_JUAL', $detail->HARGA_JUAL) }}">
-    <p class="form-hint">Harga per unit dari supplier.</p>
-</div>
+        <div class="form-group">
+            <label class="form-label">Harga Beli (Rp) <span style="color:red;">*</span></label>
+            <input type="number" name="HARGA_BELI" class="form-control" required min="0" step="1000"
+                   placeholder="Contoh: 500000" value="{{ old('HARGA_BELI', $detail->HARGA_BELI) }}">
+            <p class="form-hint">Harga per unit dari supplier.</p>
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i> Update

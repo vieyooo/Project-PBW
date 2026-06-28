@@ -15,7 +15,7 @@ class BarangBomController extends Controller
         $bomData = DB::table('bom')
             ->join('bahan_baku', 'bom.ID_BAHAN_BAKU', '=', 'bahan_baku.ID_BAHAN_BAKU')
             ->where('bom.ID_BARANG', $id)
-            ->select('bom.*', 'bahan_baku.JENIS', 'bahan_baku.KODE', 'bahan_baku.HARGA_SATUAN', 'bahan_baku.SATUAN', 'bahan_baku.STOK')
+            ->select('bom.*', 'bahan_baku.JENIS', 'bahan_baku.KODE', 'bahan_baku.HARGA_BELI', 'bahan_baku.SATUAN', 'bahan_baku.STOK')
             ->orderBy('bom.ID_BAHAN_BAKU')
             ->get();
 
@@ -25,18 +25,14 @@ class BarangBomController extends Controller
     public function create($id)
     {
         $barang = Barang::findOrFail($id);
-
         $bahanBaku = DB::table('bahan_baku')->orderBy('JENIS', 'asc')->get();
-
         return view('barang.bom.create', compact('barang', 'bahanBaku'));
     }
 
     public function store(Request $request, $id)
     {
-        $barang = Barang::findOrFail($id);
-
         $request->validate([
-            'id_bahan' => 'required|string',
+            'id_bahan' => 'required|exists:bahan_baku,ID_BAHAN_BAKU',
             'jumlah'   => 'required|numeric|min:0.01',
         ]);
 
@@ -46,7 +42,8 @@ class BarangBomController extends Controller
             ->exists();
 
         if ($exists) {
-            return back()->withErrors('Bahan baku sudah terdaftar di BOM barang ini!')->withInput();
+            return redirect()->route('barang.bom.index', $id)
+                ->with('error', 'Bahan baku sudah ada dalam BOM barang ini.');
         }
 
         DB::table('bom')->insert([
@@ -55,28 +52,33 @@ class BarangBomController extends Controller
             'JUMLAH'        => $request->jumlah,
         ]);
 
-        return redirect()->route('barang.bom.index', $id)->with('success', 'Bahan baku ditambahkan ke BOM.');
+        return redirect()->route('barang.bom.index', $id)
+            ->with('success', 'BOM berhasil ditambahkan!');
     }
 
-    public function edit($id, $bahan)
+    public function edit($id, $id_bahan)
     {
         $barang = Barang::findOrFail($id);
-
         $bom = DB::table('bom')
-            ->join('bahan_baku', 'bom.ID_BAHAN_BAKU', '=', 'bahan_baku.ID_BAHAN_BAKU')
-            ->where('bom.ID_BARANG', $id)
-            ->where('bom.ID_BAHAN_BAKU', $bahan)
-            ->select('bom.*', 'bahan_baku.JENIS', 'bahan_baku.SATUAN')
+            ->where('ID_BARANG', $id)
+            ->where('ID_BAHAN_BAKU', $id_bahan)
             ->first();
 
         if (!$bom) {
-            return redirect()->route('barang.bom.index', $id)->with('error', 'Data BOM tidak ditemukan!');
+            return redirect()->route('barang.bom.index', $id)
+                ->with('error', 'Data BOM tidak ditemukan.');
         }
 
-        return view('barang.bom.edit', compact('barang', 'bom'));
+        // Tambahkan informasi bahan baku
+        $bahan = DB::table('bahan_baku')->where('ID_BAHAN_BAKU', $id_bahan)->first();
+        $bom->JENIS = $bahan->JENIS ?? '';
+
+        $bahanBaku = DB::table('bahan_baku')->orderBy('JENIS', 'asc')->get();
+
+        return view('barang.bom.edit', compact('barang', 'bom', 'bahanBaku'));
     }
 
-    public function update(Request $request, $id, $bahan)
+    public function update(Request $request, $id, $id_bahan)
     {
         $request->validate([
             'jumlah' => 'required|numeric|min:0.01',
@@ -84,20 +86,22 @@ class BarangBomController extends Controller
 
         DB::table('bom')
             ->where('ID_BARANG', $id)
-            ->where('ID_BAHAN_BAKU', $bahan)
+            ->where('ID_BAHAN_BAKU', $id_bahan)
             ->update(['JUMLAH' => $request->jumlah]);
 
-        return redirect()->route('barang.bom.index', $id)->with('success', 'Data BOM telah diperbarui.');
+        return redirect()->route('barang.bom.index', $id)
+            ->with('success', 'BOM berhasil diupdate!');
     }
 
-    public function destroy($id, $bahan)
+    public function destroy($id, $id_bahan)
     {
         DB::table('bom')
             ->where('ID_BARANG', $id)
-            ->where('ID_BAHAN_BAKU', $bahan)
+            ->where('ID_BAHAN_BAKU', $id_bahan)
             ->delete();
 
-        return redirect()->route('barang.bom.index', $id)->with('success', 'Bahan baku telah dihapus dari BOM.');
+        return redirect()->route('barang.bom.index', $id)
+            ->with('success', 'BOM berhasil dihapus!');
     }
 
     public function cetak($id)
@@ -107,13 +111,14 @@ class BarangBomController extends Controller
         $bomData = DB::table('bom')
             ->join('bahan_baku', 'bom.ID_BAHAN_BAKU', '=', 'bahan_baku.ID_BAHAN_BAKU')
             ->where('bom.ID_BARANG', $id)
-            ->select('bom.*', 'bahan_baku.JENIS', 'bahan_baku.KODE', 'bahan_baku.HARGA_SATUAN', 'bahan_baku.SATUAN', 'bahan_baku.STOK')
+            ->select('bom.*', 'bahan_baku.JENIS', 'bahan_baku.KODE', 'bahan_baku.HARGA_BELI', 'bahan_baku.SATUAN')
             ->orderBy('bom.ID_BAHAN_BAKU')
-            ->get()
-            ->map(function ($item) {
-                $item->TOTAL_HARGA = $item->JUMLAH * $item->HARGA_SATUAN;
-                return $item;
-            });
+            ->get();
+
+        // Tambahkan total harga per item
+        foreach ($bomData as $item) {
+            $item->TOTAL_HARGA = $item->JUMLAH * $item->HARGA_BELI;
+        }
 
         return view('barang.bom.cetak', compact('barang', 'bomData'));
     }
